@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://steel-city-integrators-birmingham.racing-tide-2944.chatgpt.site/sitemap.xml
