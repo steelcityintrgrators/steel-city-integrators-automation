@@ -1,0 +1,53 @@
+name: Deploy Steel City Integrators public site
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "site/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Generate sitemap
+        shell: bash
+        run: |
+          BASE_URL="${{ steps.pages.outputs.base_url }}"
+          if [ -z "$BASE_URL" ]; then BASE_URL="https://steelcityintrgrators.github.io/steel-city-integrators-automation"; fi
+          BASE_URL="${BASE_URL%/}"
+          {
+            echo '<?xml version="1.0" encoding="UTF-8"?>'
+            echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+            for f in index.html services.html church-av.html live-streaming.html structured-cabling.html security.html networking.html displays-lighting.html industries.html service-area.html contact.html; do
+              if [ "$f" = "index.html" ]; then loc="$BASE_URL/"; else loc="$BASE_URL/$f"; fi
+              echo "  <url><loc>$loc</loc></url>"
+            done
+            echo '</urlset>'
+          } > site/sitemap.xml
+          printf 'User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n' "$BASE_URL" > site/robots.txt
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
