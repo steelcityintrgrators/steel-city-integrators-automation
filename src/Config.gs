@@ -1,5 +1,5 @@
 const SCI = Object.freeze({
-  VERSION: "1.0.0",
+  VERSION: "1.1.0",
   SHEETS: Object.freeze({
     LEADS: "Leads",
     ACTIVITY: "Activity",
