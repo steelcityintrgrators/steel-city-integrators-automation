@@ -4,7 +4,7 @@ Autonomous lead intake, CRM, customer follow-up, booking, and operations system 
 
 ## Current build
 
-**Core v1 is implemented** using a $0-first Google stack:
+**Core v1.1 is implemented** using a $0-first Google stack:
 
 - Google Forms lead intake
 - Website/API lead intake
@@ -14,6 +14,9 @@ Autonomous lead intake, CRM, customer follow-up, booking, and operations system 
 - Hourly follow-up engine
 - 7:00 AM-9:00 PM Central operating window
 - Google Calendar availability + booking
+- Branded customer booking page
+- Stable customer service-request redirect
+- Public health response hardened to exclude internal Google resource IDs
 - Daily operations summary
 - SMS webhook adapter for phone/text provider integration
 - Diagnostics and activity audit trail
@@ -47,4 +50,4 @@ That one command creates the CRM spreadsheet, lead form, booking calendar, and a
 
 ## Status
 
-Core v1: **built; deployment/Google authorization is the next step.**
+Core v1.1: **built; live deployment needs the latest dist/Code.gs bundle.**
