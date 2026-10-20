@@ -1,11 +1,8 @@
 name: Deploy Steel City Integrators public site
 
+# GitHub Pages must be enabled once in repository Settings before this manual
+# deployment can run. The public production site is currently hosted separately.
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - "site/**"
-      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -29,8 +26,6 @@ jobs:
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Generate sitemap
         shell: bash
         run: |
