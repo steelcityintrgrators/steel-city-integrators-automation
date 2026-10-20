@@ -15,6 +15,8 @@ function doPost(e) {
   try {
     const payload = parseRequestBody_(e);
     const action = safeText_(payload.action);
+    enforceRateLimit_(payload);
+
     if (action === "lead") return jsonResponse_(handleWebLead_(payload));
     if (action === "book") return jsonResponse_(bookAppointment_(payload));
     return jsonResponse_({ok: false, error: "Unknown action"});
@@ -30,6 +32,23 @@ function parseRequestBody_(e) {
   const obj = {};
   Object.keys(e.parameter || {}).forEach(function(key) { obj[key] = e.parameter[key]; });
   return obj;
+}
+
+function enforceRateLimit_(payload) {
+  const identity = [
+    safeText_(payload.email).toLowerCase(),
+    safeText_(payload.phone),
+    safeText_(payload.name).toLowerCase()
+  ].join("|");
+
+  if (!identity.replace(/\|/g, "")) return;
+
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, identity);
+  const key = "rl:" + Utilities.base64EncodeWebSafe(digest).slice(0, 32);
+  const cache = CacheService.getScriptCache();
+  const current = Number(cache.get(key) || "0");
+  if (current >= 5) throw new Error("Too many requests. Please try again later.");
+  cache.put(key, String(current + 1), 3600);
 }
 
 function jsonResponse_(obj) {
