@@ -2,6 +2,8 @@ function doGet(e) {
   try {
     const action = safeText_(e && e.parameter && e.parameter.action) || "health";
     if (action === "health") return jsonResponse_({ok: true, status: systemStatus()});
+    if (action === "booking") return bookingPage_();
+    if (action === "service") return serviceFormPage_();
     if (action === "availability") {
       return jsonResponse_({ok: true, slots: getAvailability_(safeText_(e.parameter.date))});
     }
