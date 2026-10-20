@@ -27,7 +27,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Configure Pages
+        id: pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Generate sitemap
         shell: bash
         run: |
