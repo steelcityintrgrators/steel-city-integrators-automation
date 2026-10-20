@@ -30,9 +30,13 @@ function getSystemLinks() {
   const cfg = requireConfigured_();
   const ss = SpreadsheetApp.openById(cfg.crmSheetId);
   const form = FormApp.openById(cfg.leadFormId);
+  const webApp = ScriptApp.getService().getUrl() || "";
   return {
     crm: ss.getUrl(),
     leadForm: form.getPublishedUrl(),
+    webApp: webApp,
+    serviceRequest: webApp ? webApp + "?action=service" : "",
+    booking: webApp ? webApp + "?action=booking" : "",
     calendarId: cfg.calendarId
   };
 }
