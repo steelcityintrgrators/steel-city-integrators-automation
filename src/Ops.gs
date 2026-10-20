@@ -62,9 +62,6 @@ function systemStatus() {
   return {
     version: SCI.VERSION,
     configured: Boolean(cfg.crmSheetId && cfg.leadFormId && cfg.calendarId),
-    crmSheetId: cfg.crmSheetId,
-    leadFormId: cfg.leadFormId,
-    calendarId: cfg.calendarId,
     businessHours: "07:00-21:00",
     smsConfigured: Boolean(cfg.smsWebhookUrl)
   };
