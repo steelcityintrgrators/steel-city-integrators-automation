@@ -86,3 +86,14 @@ Optional values:
 - `SERVICE_RADIUS_MILES` (default 80)
 - `HOME_BASE` (default Birmingham, Alabama)
 - `APPOINTMENT_MINUTES` (default 60)
+
+
+## Customer-facing routes
+
+After deploying the web app, these routes are available:
+
+- `?action=health` — minimal public health check; internal Google IDs are not exposed.
+- `?action=service` — stable customer service-request link that forwards to the current Google Form.
+- `?action=booking` — branded consultation booking page with live Calendar availability.
+
+The booking page can create a CRM lead when a matching email or phone number does not already exist, then books the appointment, updates the lead to Scheduled, sends the calendar invitation, and sends a booking confirmation email.
