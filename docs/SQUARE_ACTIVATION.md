@@ -29,21 +29,17 @@ Official references:
    - SQUARE_ENVIRONMENT = production
    - PAYMENT_PROVIDER = disabled
 4. Deploy the v1.3 Apps Script bundle and run upgradeSystemV13().
-5. In the Apps Script editor, run:
-   configureSquare("TOKEN_FROM_SCRIPT_PROPERTY", "LOCATION_ID", "production", "https://steel-city-integrators-birmingham.racing-tide-2944.chatgpt.site")
-   
-   For safer activation, pass the values from Script Properties in an owner-only helper rather than typing them into shared documentation or messages.
-6. Run verifySquareConfiguration_() from the editor and confirm the location is ACTIVE.
-7. Run activatePaymentProvider("square").
-8. Run runDiagnostics() and confirm payment.provider is square and payment.configured is true.
-9. Complete one controlled live booking:
+5. Run verifySquareConfiguration_() from the editor and confirm the location is ACTIVE. Because the token and location were added directly as Script properties, there is no need to paste them into a function call, source file, chat or deployment log.
+6. Run activatePaymentProvider("square"). This performs the verification again before changing PAYMENT_PROVIDER.
+7. Run runDiagnostics() and confirm payment.provider is square and payment.configured is true.
+8. Complete one controlled live booking:
    - use Phone Support ($40)
    - confirm Square shows a completed $40 order
    - confirm the booking page opens only after verification
    - create the appointment
    - confirm Bookings row, Calendar event, customer email, internal email, and reminder triggers
-10. Refund the controlled transaction in Square if appropriate for the test.
-11. Recheck the public Support page; its buttons should now route into Square without a website code change.
+9. Refund the controlled transaction in Square if appropriate for the test.
+10. Recheck the public Support page; its buttons should now route into Square without a website code change.
 
 ## Emergency disable
 
