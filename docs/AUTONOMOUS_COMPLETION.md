@@ -1,12 +1,12 @@
 # Autonomous System Completion Runbook
 
-Current customer journey: website -> payment gate -> verified scheduling -> confirmation/reminders -> service -> follow-up.
+Current customer journey: awareness -> industry landing page -> project/consultation request -> CRM qualification -> payment when applicable -> scheduling or site assessment -> proposal -> installation -> follow-up/retainer.
 
 ## Account-dependent blocker
-Checkout is intentionally disabled until a legitimate payment processor account is activated and verified. Never remove this gate merely to make the UI appear complete. Once a supported processor is verified, configure credentials outside GitHub, run diagnostics, and perform a controlled live transaction before enabling public checkout.
+Checkout is intentionally disabled until Square is activated and verified. The public website falls back to CRM intake while payment is disabled. Once Square is verified, configure credentials outside GitHub, run diagnostics, activate the provider and perform a controlled live transaction. Runtime status activates the payment path without another public-site rebuild.
 
 ## Prospecting
-The target on-site market is now defined by drive time: up to approximately four hours from Birmingham, Alabama. Prospecting should use the methodology in PROSPECT_INTELLIGENCE.md and sync qualified records to the existing CRM.
+The target on-site market is defined by drive time: up to approximately four hours from Birmingham, Alabama. Prospecting uses the methodology in PROSPECT_INTELLIGENCE.md. Qualified prospects require human review before CRM promotion; suppression overrides score.
 
 ## Definition of operational completion
 1. Public site and service territory copy deployed.
@@ -19,3 +19,4 @@ The target on-site market is now defined by drive time: up to approximately four
 8. Outreach suppression/opt-out is enforced.
 9. Daily operations summary reports new prospects, hot leads, bookings, payments, projects and exceptions.
 10. Google Business Profile is separately verified/published; website code cannot substitute for Google's verification.
+

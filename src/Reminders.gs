@@ -49,3 +49,4 @@ function bookingsSheet_() {
 function bookingObject_(row) {
   return {sessionId:safeText_(row[0]),serviceCode:safeText_(row[2]),serviceName:safeText_(row[3]),amount:Number(row[4]||0),name:safeText_(row[5]),email:safeText_(row[6]),phone:safeText_(row[7]),organization:safeText_(row[8]),location:safeText_(row[9]),start:row[10],end:row[11],eventId:safeText_(row[12]),confirmation:row[13],reminder24:row[14],reminder2:row[15],followUp:row[16],status:safeText_(row[17])};
 }
+
