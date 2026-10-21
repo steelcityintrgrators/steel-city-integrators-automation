@@ -16,6 +16,14 @@ Production website, prepaid booking, CRM, Google Calendar scheduling and custome
 - Gmail confirmations, 24-hour and 2-hour reminders, and post-service follow-up
 - Google Sheets CRM, lead scoring, pipeline activity and daily operations summary
 - Google Business Profile copy and SEO assets
+- Proprietary prospect-intelligence specification and scoring core
+- Four-hour drive-time target territory from Birmingham with travel-aware prioritization
+
+## Prospect acquisition
+
+`Public/licensed business data → enrichment → need signals → scoring → CRM → personalized outreach → paid booking/project request`
+
+See `docs/PROSPECT_INTELLIGENCE.md` for data provenance, compliance guardrails, scoring and routing.
 
 ## Customer journey
 
