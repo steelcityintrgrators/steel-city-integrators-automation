@@ -1,55 +1,98 @@
 # Steel City Prospect Intelligence Engine
 
 ## Objective
-Continuously build a proprietary, source-traceable prospect database for organizations within an approximately four-hour drive of Birmingham, Alabama, then prioritize likely buyers of Steel City Integrators services.
+
+Build a proprietary, source-traceable database of organizations within an approximately four-hour drive of Birmingham, then prioritize legitimate commercial opportunities for Steel City Integrators.
 
 ## Target organizations
-Churches, funeral homes, daycares, schools/nonprofits, event venues and small/commercial businesses.
+
+Houses of worship, funeral homes, daycares, dental and medical offices, HVAC/plumbing/trade businesses, professional offices, small-to-midsize commercial businesses, schools, nonprofits and community facilities.
 
 ## Territory tiers
-- Tier 1: 0–1 hour — all services, highest priority.
-- Tier 2: 1–2 hours — all commercial services; travel-aware scoring.
-- Tier 3: 2–3 hours — prioritize larger installations, upgrades and retainers.
-- Tier 4: 3–4 hours — prioritize strategic/high-value projects whose expected value justifies travel.
-- Outside 4 hours — remote consultation/support only unless manually approved.
+
+- Tier 1: 0–1 hour — all services, highest priority
+- Tier 2: 1–2 hours — all commercial services with travel-aware qualification
+- Tier 3: 2–3 hours — prioritize larger installations, upgrades and retainers
+- Tier 4: 3–4 hours — prioritize strategic projects whose expected value justifies travel
+- Outside 4 hours — remote consultation/support unless manually approved
 
 Drive time is the qualification standard. Straight-line distance must not be represented as drive time.
 
-## Prospect record
-Store: prospect_id, organization, vertical, address/city/state/ZIP, website, public phone, public business email, public decision-maker name/title when lawfully available, source URL/provider, source timestamp, drive-time tier, service hypotheses, evidence signals, opportunity score, outreach eligibility, CRM status, last verified date.
+## Compliant source registry
 
-Every material fact should retain provenance. Do not invent missing contact information.
+Allowed source classes when terms permit:
+- official business and organization websites
+- public Google Business Profile/Maps business listings used as business records, not anonymous-searcher identity
+- state licensing and corporate registries
+- public procurement, RFP and permit portals
+- chamber, association, school, nonprofit and denominational directories
+- public job postings, news releases and expansion announcements
+- licensed business-data providers with documented permitted use
+- existing CRM records and customer referrals
+- aggregate Google Ads, Search Console and trend data
+- aggregate campaign performance captured in the Campaign Performance sheet
+
+Every material business fact retains source URL/provider, source timestamp and last verified date. Missing contact details are not invented.
+
+## Prospect record
+
+Store: prospect ID, organization, vertical, location, website, public phone, public business email, public decision-maker role when lawfully available, source URL/provider/timestamp, drive minutes/tier, need signals, aggregate demand index, campaign fit, project fit, score, outreach eligibility, suppression state, CRM lead ID and last verified date.
 
 ## Need signals
-Examples include: active livestreaming; visibly dated production workflow; expansion/renovation/new location; multiple facilities; public references to security, cameras, controlled entry, Wi-Fi, network, AV, sound, displays, cabling or construction; technical/media hiring; public RFP/procurement notices; and other public evidence of a relevant project.
 
-## Opportunity score (0–100)
-- Relevant target vertical: 10
-- Within target drive-time territory: up to 20 (Tier 1=20, Tier 2=16, Tier 3=12, Tier 4=8)
-- One credible need signal: 15
-- Multiple independent need signals: +10
-- Recent/high-intent signal (RFP, renovation, opening, hiring, explicit upgrade): 20
-- Public business contact path: 10
-- Public decision-maker role/contact: 10
-- Estimated project-fit/value: up to 15
-Cap at 100.
+Examples:
+- active but visibly limited livestream or production workflow
+- expansion, renovation, relocation or new facility
+- multiple facilities
+- public references to cameras, controlled entry, Wi-Fi, network, AV, sound, displays, cabling or construction
+- relevant technical/media/facilities hiring
+- public RFP, bid, procurement or permit activity
+- operational pain explicitly described by the organization
+
+Signals must be public, relevant and attributable.
+
+## Opportunity score
+
+- relevant target vertical: 10
+- drive-time territory: up to 20
+- one credible need signal: 15
+- multiple independent need signals: +10
+- recent/high-intent public signal: 20
+- public business contact path: 10
+- public decision-maker role: 10
+- estimated project fit: up to 15
+- aggregate demand context: up to 5
+- historical campaign fit: up to 5
+- total capped at 100
 
 Routing:
-- 80–100: Hot — research/personalize and route to human-safe outreach queue.
-- 60–79: Qualified — personalized outreach queue.
-- 40–59: Nurture — retain and recheck signals.
-- <40: Database only.
+- 80–100: Hot — human research and personalized review queue
+- 60–79: Qualified — human review queue
+- 40–59: Nurture — retain and recheck
+- below 40: Database only
+
+Suppression and opt-out status override score. Automated cold SMS/calls are not permitted without required consent.
+
+## CRM safety boundary
+
+upsertProspect(payload) creates or updates the separate Prospects sheet and deduplicates by domain, public phone or organization/location.
+
+A prospect never enters automated follow-up merely because it scored highly. promoteProspectToCrm(prospectId, true) requires an explicit human-review confirmation, blocks suppressed records and creates the CRM record in Prospecting Review with the next automated follow-up blank.
+
+## Aggregate demand and campaign learning
+
+Aggregate search demand helps prioritize markets and content; it does not reveal who searched. Campaign Performance stores impressions, clicks, leads, qualified leads, appointments, proposals, wins, revenue and spend by channel and vertical. Conversion and revenue trends can adjust campaign-fit inputs without changing compliance rules or fabricating identities.
 
 ## Acquisition loop
-Discovery -> enrichment -> provenance/dedupe -> need-signal detection -> scoring -> CRM sync -> personalized outreach queue -> paid booking/project request -> calendar -> service -> follow-up -> review/retainer.
 
-## Data and outreach guardrails
-Use lawful public/business data and licensed APIs/datasets. Respect source terms, robots/rate limits where applicable, opt-outs and applicable email/SMS/telemarketing rules. Do not buy, infer or expose sensitive personal data. Do not claim to identify an individual Google searcher. Google search/Ads/Search Console data is used as aggregate demand intelligence; identifiable prospects come from legitimate business/public sources.
+Discovery → provenance and dedupe → need-signal verification → drive-time qualification → scoring → human review → CRM promotion → relevant outreach → consultation/project request → proposal → installation → follow-up/retainer
 
-Cold outreach must be targeted and relevant, identify Steel City Integrators, provide a working opt-out for email where required, and avoid automated marketing SMS/calls without the required consent. Suppression/opt-out status overrides scoring.
+## Prohibited claims and data practices
 
-## CRM integration
-Prospects that reach the configured threshold are inserted or updated in the existing CRM, never duplicated. Use normalized domain + phone + organization/location matching for dedupe. Set Lead Source to Prospect Intelligence and retain the original source/provenance separately.
+- Do not claim to identify individual anonymous Google searchers.
+- Do not scrape or use a source in violation of its terms.
+- Do not buy, infer or expose sensitive personal data.
+- Do not invent names, emails, roles, need signals or project timing.
+- Do not bypass suppression, opt-out or consent requirements.
+- Do not present straight-line radius as verified drive time.
 
-## Autonomous learning
-Track prospect source, signals, score at creation, outreach attempts, replies, bookings, proposals, wins, revenue and service type. Periodically compare conversion/revenue against the signals so scoring weights can be improved without silently changing compliance rules.

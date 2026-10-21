@@ -3,10 +3,11 @@ function doGet(e) {
     const params = (e && e.parameter) || {};
     const action = safeText_(params.action) || "health";
     if (action === "health") return jsonResponse_({ok: true, status: systemStatus()});
+    if (action === "payment_status") return javascriptResponse_("SCI_PAYMENT_STATUS(" + JSON.stringify(paymentProviderStatus_()) + ");");
     if (action === "booking") return bookingPage_(params);
-    if (action === "service") return serviceFormPage_();
+    if (action === "service") return serviceFormPage_(params);
     if (action === "availability") {
-      const payment = verifyStripeCheckoutSession_(safeText_(params.session_id));
+      const payment = verifyPayment_(paymentReferenceFromParams_(params));
       return jsonResponse_({ok: true, slots: getAvailability_(safeText_(params.date), payment.service.durationMinutes)});
     }
     return jsonResponse_({ok: false, error: "Unknown action"});
@@ -54,8 +55,10 @@ function enforceRateLimit_(payload) {
 }
 
 function jsonResponse_(obj) { return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON); }
+function javascriptResponse_(source) { return ContentService.createTextOutput(source).setMimeType(ContentService.MimeType.JAVASCRIPT); }
 
 function errorPage_(message) {
   const cfg = sciConfig_();
   return HtmlService.createHtmlOutput('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Steel City Integrators</title><style>body{font-family:Arial;background:#07111c;color:#fff;padding:40px}.card{max-width:640px;margin:auto;padding:30px;border:1px solid #294258;border-radius:18px;background:#0d1c2b}a{color:#ff6b2c}</style></head><body><div class="card"><h1>We could not open checkout.</h1><p>' + htmlEscape_(message) + '</p><p><a href="' + htmlEscape_(cfg.websiteUrl) + '/book.html" target="_top">Return to pricing and booking</a></p></div></body></html>');
 }
+

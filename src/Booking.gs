@@ -27,7 +27,7 @@ function bookAppointment_(payload, payment) {
   const location = safeText_(payload.location);
   if (!name || !email || !dateText || !/^\d{2}:\d{2}$/.test(timeText)) throw new Error("Name, email, date and time are required.");
   if (payment.customer.email && email.toLowerCase() !== payment.customer.email.toLowerCase()) throw new Error("The booking email must match the email used at checkout.");
-  if (payment.service.code.indexOf("onsite_") === 0 && !location) throw new Error("The on-site service address is required.");
+  if (payment.service.code === "onsite_consultation" && !location) throw new Error("The on-site service address is required.");
 
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
@@ -41,10 +41,10 @@ function bookAppointment_(payload, payment) {
     const calendar = CalendarApp.getCalendarById(cfg.calendarId);
     const title = "SCI — " + payment.service.name + " — " + name;
     const description = [
-      "PREPAID STEEL CITY INTEGRATORS APPOINTMENT",
+      "STEEL CITY INTEGRATORS APPOINTMENT",
       "Service: " + payment.service.name,
-      "Payment session: " + payment.id,
-      "Payment intent: " + payment.paymentIntentId,
+      "Payment reference: " + payment.id,
+      "Transaction: " + payment.paymentIntentId,
       "Amount paid: " + money_(payment.amountTotal),
       "Lead ID: " + leadId,
       "Email: " + email,
@@ -60,6 +60,7 @@ function bookAppointment_(payload, payment) {
       appendActivity_(leadId,"appointment_booked","calendar",payment.service.name + " | " + dateText + " " + timeText);
     }
     sendBookingConfirmation_(payment,payload,start,end);
+    finalizePaymentReference_(payment);
     return {ok:true,eventId:event.getId(),start:start.toISOString(),end:end.toISOString(),service:payment.service.name};
   } finally { lock.releaseLock(); }
 }
@@ -88,7 +89,7 @@ function sendBookingConfirmation_(payment,payload,start,end) {
     "Steel City Integrators LLC","(659) 223-4118",cfg.businessEmail
   ].filter(String).join("\n");
   GmailApp.sendEmail(email,"Confirmed: " + payment.service.name + " — " + when,body,{name:cfg.businessName});
-  GmailApp.sendEmail(cfg.businessEmail,"[PAID BOOKING] " + payment.service.name + " — " + when,body + "\n\nCustomer: " + (safeText_(payload.name) || payment.customer.name),{name:cfg.businessName});
+  GmailApp.sendEmail(cfg.businessEmail,"[SERVICE BOOKING] " + payment.service.name + " — " + when,body + "\n\nCustomer: " + (safeText_(payload.name) || payment.customer.name),{name:cfg.businessName});
 }
 
 function localDateTime_(dateText,timeText) {
@@ -96,3 +97,4 @@ function localDateTime_(dateText,timeText) {
   return new Date(d[0],d[1]-1,d[2],t[0],t[1],0,0);
 }
 function pad2_(n) { return String(n).padStart(2,"0"); }
+

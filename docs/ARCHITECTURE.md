@@ -1,87 +1,101 @@
-# Autonomous System Architecture
+# Autonomous System Architecture — Release 1.3
 
-The $0-first release is organized into five operating layers.
+## 1. Public experience
 
-## 1. Lead capture
+The static site positions Steel City Integrators as a commercial technology integration company serving qualified work within approximately a four-hour drive of Birmingham.
 
-**Inputs**
-- Google Form created by `setupSystem()`
-- Website/API POST endpoint
+Primary markets:
+- Commercial Businesses
+- Houses of Worship
+- Community & Institutional Facilities
 
-**Automation**
-- Validates lead details
-- Stores the lead in the CRM spreadsheet
-- Scores the opportunity
-- Sends an acknowledgement
-- Sends an internal lead alert
+Six industry landing pages carry campaign-specific messaging and project-request links. UTM parameters persist during the visit and are forwarded into the CRM intake page.
 
-## 2. CRM + qualification
+## 2. Lead capture and CRM qualification
 
-The **Leads** tab is the system of record.
+Inputs:
+- industry landing-page project request
+- legacy Google Form
+- website/API POST
+- verified support booking
+- human-reviewed Prospect Intelligence promotion
 
-Each lead receives:
-- Unique SCI lead ID
-- Source
-- Contact and organization data
-- Customer type
-- Requested services
-- Budget and timeline
-- Lead score
-- Pipeline stage
-- Follow-up state
-- Appointment ID
+The Leads sheet remains the customer-opportunity system of record. Release 1.3 adds industry segment, campaign, UTM source/medium/campaign and source-detail columns without replacing existing lead history.
 
-Current target customer types:
-- Churches
-- Funeral homes
-- Daycares
-- Small businesses
+Lead handling:
+1. validate contact and project location
+2. create or update CRM record
+3. score commercial fit, urgency, budget and service need
+4. send Gmail acknowledgement and internal alert
+5. schedule follow-up inside the 7:00 AM–9:00 PM Central operating window
 
-## 3. Communication + follow-up
+## 3. Prospect Intelligence Engine
 
-The hourly follow-up engine operates only between **7:00 AM and 9:00 PM Central**.
+The Prospects sheet is separate from customer leads. A prospect record requires a legitimate public/licensed source and provenance. It combines:
 
-Sequence:
-1. First follow-up
-2. Second follow-up
-3. Final follow-up
+- organization and public business contact data
+- four-hour drive-time qualification
+- public need signals
+- aggregate search-demand index
+- historical campaign fit
+- project-fit estimate
+- suppression and outreach-eligibility state
 
-Email works immediately through Gmail. Text messaging automatically becomes available when an SMS webhook is configured.
+Prospects never enter automated outreach. Scores of 60+ may be promoted only through promoteProspectToCrm(prospectId, true), which creates a Prospecting Review record with automated follow-up disabled. Human review remains required.
 
-## 4. Booking
+The engine does not identify anonymous individual searchers.
 
-The web app exposes:
-- Availability lookup
-- Appointment booking
+## 4. Consultation, payment and scheduling
 
-Bookings are written to the dedicated **Steel City Integrators Bookings** calendar and invite the customer by email.
+Public support catalog:
+- Phone Support — $40 / 30 minutes
+- Text Support — $40 / 30 minutes
+- Remote Technical Support — $150 / hour
+- Remote Consultation — $350
+- On-Site Consultation — $500
+- Installation / project work — custom proposal
 
-## 5. Operations
+The payment adapter supports disabled, square and stripe states. Disabled is the safe default. The public Support page checks backend status at runtime:
 
-A daily operations summary emails:
-- New leads
-- Open leads
-- Hot leads scoring 60+
-- Next-day appointments
+- disabled/unverified: route into CRM request and qualification
+- verified/active: create hosted checkout and verify the provider response server-side
 
-The **Activity** tab creates an audit trail of system activity.
+Scheduling is never released until the provider confirms the exact server-side service and amount. Square is the intended primary production provider.
 
-## Cost model
+## 5. Google automation
 
-The core uses:
-- Google Apps Script
-- Google Sheets
-- Google Forms
-- Gmail
-- Google Calendar
+Google Sheets:
+- Leads
+- Activity
+- Settings
+- Bookings
+- Prospects
+- Campaign Performance
 
-There is no required paid software for the core. SMS/voice can be connected later without redesigning the rest of the system.
+Google Calendar:
+- availability checks
+- conflict prevention
+- appointment event creation
+- customer invitation
 
-## Next build layer
+Gmail:
+- lead acknowledgement
+- internal lead alert
+- booking confirmation
+- 24-hour and 2-hour reminders
+- post-service follow-up
+- daily operations summary
 
-After deployment and authorization:
-1. Connect the public website lead form to the web app.
-2. Connect SMS/voice after provider verification.
-3. Add estimates/proposals and job pipeline automation.
-4. Add lead-source tracking for Google Ads/Search campaigns.
-5. Add service-radius qualification and route planning.
+## 6. Campaign measurement
+
+The Campaign Performance sheet stores channel-level aggregate metrics: impressions, clicks, leads, qualified leads, appointments, proposals, wins, revenue and spend. Aggregate performance may influence vertical prioritization, but it is not used to claim the identity of anonymous searchers.
+
+## 7. Security and continuity
+
+- no secrets in GitHub or static website files
+- provider credentials live in Apps Script properties
+- checkout can be disabled immediately without a website deployment
+- customer and prospect data remain in owner-controlled Google systems
+- existing CRM, Calendar, Gmail, Form and trigger identities are upgraded in place through upgradeSystemV13()
+- setupSystem() is not rerun on the production project
+

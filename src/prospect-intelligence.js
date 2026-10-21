@@ -21,7 +21,11 @@ function prospectDriveTier(minutes) {
 
 function scoreProspect(p) {
   p = p || {};
-  const targetVerticals = ['church','funeral home','daycare','school','nonprofit','event venue','small business','commercial business'];
+  const targetVerticals = [
+    'church','house of worship','funeral home','daycare','dental office','medical office','hvac company',
+    'plumbing company','trade business','professional office','school','community facility','nonprofit',
+    'event venue','small business','commercial business'
+  ];
   const tier = prospectDriveTier(p.driveMinutes);
   let score = 0;
   if (targetVerticals.includes(String(p.vertical || '').trim().toLowerCase())) score += 10;
@@ -33,11 +37,16 @@ function scoreProspect(p) {
   if (p.publicBusinessContact === true) score += 10;
   if (p.publicDecisionMaker === true) score += 10;
   score += Math.max(0, Math.min(15, Number(p.projectFitPoints) || 0));
+  // Aggregate search demand and historical campaign fit improve prioritization;
+  // neither signal identifies an anonymous individual searcher.
+  score += Math.round(Math.max(0, Math.min(100, Number(p.aggregateDemandIndex) || 0)) / 20);
+  score += Math.max(0, Math.min(5, Number(p.campaignFitPoints) || 0));
   score = Math.min(100, score);
   const temperature = score >= SCI_PROSPECT.HOT ? 'Hot' :
     score >= SCI_PROSPECT.QUALIFIED ? 'Qualified' :
     score >= SCI_PROSPECT.NURTURE ? 'Nurture' : 'Database';
-  return { score, temperature, driveTier: tier.tier, onsiteEligible: tier.onsite };
+  const outreachEligible = p.suppressed !== true && tier.onsite && p.publicBusinessContact === true && score >= SCI_PROSPECT.QUALIFIED;
+  return { score, temperature, driveTier: tier.tier, onsiteEligible: tier.onsite, outreachEligible };
 }
 
 function prospectDedupeKey(p) {
@@ -50,3 +59,4 @@ function prospectDedupeKey(p) {
 }
 
 if (typeof module !== 'undefined') module.exports = { SCI_PROSPECT, prospectDriveTier, scoreProspect, prospectDedupeKey };
+

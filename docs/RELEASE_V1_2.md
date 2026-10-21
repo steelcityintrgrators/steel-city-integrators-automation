@@ -23,3 +23,4 @@
 - Google Business Profile verification and publication
 
 The website and automation code deliberately keep payment credentials out of the repository.
+

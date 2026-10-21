@@ -18,8 +18,13 @@ jobs:
         run: node --check site/site.js
       - name: Validate Apps Script bundle syntax
         run: node --check < dist/Code.gs
+      - name: Verify generated Apps Script bundle
+        run: node scripts/build-apps-script.js --check
       - name: Run automation tests
-        run: node tests/automation.test.js
+        run: |
+          node tests/automation.test.js
+          node tests/prospect-intelligence.test.js
+          node tests/site.test.js
       - name: Check required public files
         shell: bash
         run: |
@@ -29,3 +34,10 @@ jobs:
           test -f site/terms.html
           test -f site/sitemap.xml
           test -f site/robots.txt
+          test -f site/houses-of-worship.html
+          test -f site/funeral-homes.html
+          test -f site/daycares.html
+          test -f site/healthcare-offices.html
+          test -f site/trade-businesses.html
+          test -f site/commercial-businesses.html
+
