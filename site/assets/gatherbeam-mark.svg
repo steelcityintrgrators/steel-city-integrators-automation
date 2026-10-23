@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="GatherBeam mark">
+<defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0B63F6"/><stop offset="1" stop-color="#55C7FF"/></linearGradient></defs>
+<rect width="120" height="120" rx="24" fill="#07111F"/>
+<g transform="translate(15 13)"><path d="M46 4 8 88h25l28-61z" fill="#FFFFFF"/><path d="M49 4 82 88H58L38 40z" fill="url(#g)"/><path d="M31 54h57l12 26H20z" fill="#1786FF" opacity=".9"/><path d="M49 7 39 34l18 19 15-30z" fill="#EAF7FF"/></g>
+</svg>
