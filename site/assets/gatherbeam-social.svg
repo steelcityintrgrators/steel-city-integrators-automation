@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+<defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#06111F"/><stop offset="1" stop-color="#0D3B70"/></linearGradient><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#0B63F6"/><stop offset="1" stop-color="#55C7FF"/></linearGradient></defs>
+<rect width="1200" height="630" fill="url(#b)"/><circle cx="1000" cy="80" r="420" fill="#1378FF" opacity=".12"/><circle cx="110" cy="620" r="330" fill="#43C8FF" opacity=".09"/>
+<g transform="translate(90 72) scale(.9)"><path d="M46 8 8 92h26l28-62z" fill="#fff"/><path d="M49 8 82 92H58L38 43z" fill="url(#g)"/><path d="M32 58h58l12 26H20z" fill="#1786FF" opacity=".9"/></g>
+<text x="205" y="142" font-family="Arial" font-size="48" fill="#fff" font-weight="700">GatherBeam</text>
+<text x="90" y="315" font-family="Arial" font-size="72" fill="#fff" font-weight="800">From sanctuary</text><text x="90" y="395" font-family="Arial" font-size="72" fill="#49AEFF" font-weight="800">to everyone.</text>
+<text x="90" y="485" font-family="Arial" font-size="30" fill="#B9CDE4">Remote diagnostics · Streaming · Content · Growth · Support</text>
+<rect x="90" y="535" width="285" height="58" rx="29" fill="#0F72FF"/><text x="135" y="573" font-family="Arial" font-size="24" fill="#fff" font-weight="700">gatherbeam.com</text>
+</svg>
