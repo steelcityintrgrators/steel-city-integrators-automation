@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Free AV Reliability Score | Steel City Integrators</title>
+  <meta name="description" content="Score the reliability of your church, chapel or small-venue AV and livestream workflow in under three minutes.">
+  <meta name="theme-color" content="#07111c">
+  <link rel="canonical" href="https://steel-city-integrators-birmingham.racing-tide-2944.chatgpt.site/av-reliability-score.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="v2.css">
+  <style>
+    .score-shell{max-width:960px;margin:0 auto}.score-card{background:#fff;border:1px solid rgba(7,17,28,.12);border-radius:18px;padding:24px;margin:16px 0;box-shadow:0 16px 40px rgba(7,17,28,.07)}
+    .score-card h3{margin-top:0}.answer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.answer-grid label{display:block;border:1px solid rgba(7,17,28,.14);border-radius:12px;padding:14px;cursor:pointer}
+    .answer-grid input{margin-right:8px}.score-result{display:none;background:#07111c;color:#fff;border-radius:18px;padding:28px;margin-top:24px}.score-number{font-size:64px;font-weight:800;line-height:1}
+    .score-meter{height:12px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden;margin:16px 0}.score-meter span{display:block;height:100%;width:0;background:#fff;transition:width .45s ease}
+    .result-list{margin:18px 0 0;padding-left:20px}.micro{font-size:.9rem;opacity:.78}.error{display:none;color:#a31414;font-weight:700;margin-top:12px}
+    @media(max-width:720px){.answer-grid{grid-template-columns:1fr}.score-card{padding:18px}.score-number{font-size:52px}}
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="shell nav-row"><a class="logo" href="index.html"><span><strong>STEEL CITY</strong><small>INTEGRATORS</small></span></a><button class="menu-button" aria-expanded="false" aria-controls="site-menu">Menu</button><nav id="site-menu" class="site-menu"><a href="index.html#capabilities">Capabilities</a><a href="index.html#markets">Markets</a><a href="book.html">Support</a><a class="nav-cta" href="book.html">Get technical help</a></nav></div></header>
+<main id="main">
+<section class="vertical-hero"><div class="vertical-grid-bg"></div><div class="shell vertical-hero-grid"><div class="reveal"><p class="kicker"><span></span>Free 3-minute assessment</p><h1>How reliable is your AV and livestream workflow?</h1><p>Answer ten practical questions about audio, streaming, network, backup and operator readiness. You will receive an instant reliability score and the highest-priority areas to review.</p></div><div class="vertical-mark reveal"><span>SCI</span><strong>AV Reliability Score</strong><small>ASSESS · PRIORITIZE · IMPROVE</small></div></div></section>
+<section class="section"><div class="shell score-shell">
+<form id="reliability-form" novalidate>
+  <div class="section-intro"><p class="kicker dark"><span></span>Reliability check</p><h2>Choose the answer that best describes your normal operation.</h2><p>Score the workflow you use today—not the system you plan to have later.</p></div>
+  <div id="questions"></div>
+  <button class="button primary wide" type="submit">Calculate my reliability score</button>
+  <p id="form-error" class="error">Answer all ten questions to calculate a score.</p>
+</form>
+<div id="score-result" class="score-result" aria-live="polite">
+  <p class="kicker"><span></span>Your AV Reliability Score</p>
+  <div class="score-number"><span id="score-value">0</span>/100</div>
+  <div class="score-meter"><span id="score-bar"></span></div>
+  <h2 id="score-tier"></h2>
+  <p id="score-summary"></p>
+  <h3>Priority review areas</h3><ul id="priority-list" class="result-list"></ul>
+  <div class="button-row" style="margin-top:24px"><a class="button primary" href="https://script.google.com/macros/s/AKfycbxY9w1aN8opIaV-u_uxu1V_FDXoUg3vFPjC6AdTTGHBkQGEodIFf5LA5EVQFUCVqpQO/exec?action=service&campaign=av-reliability-score">Request a professional assessment</a><a class="button ghost" href="book.html">Consultation & support</a></div>
+  <p class="micro">This self-assessment is an educational planning tool, not a certification, warranty or substitute for an on-site technical evaluation.</p>
+</div>
+</div></section>
+<section class="final-cta"><div class="shell final-grid"><div><p class="kicker"><span></span>When reliability matters</p><h2>Turn the score into a practical upgrade plan.</h2><p>Steel City Integrators can review the signal path, network, operator workflow and backup strategy before recommending equipment.</p></div><a class="button primary" href="book.html">View support & consultation options</a></div></section>
+</main>
+<footer class="site-footer"><div class="shell footer-grid"><div><a class="logo footer-logo" href="index.html"><span><strong>STEEL CITY</strong><small>INTEGRATORS LLC</small></span></a><p>Commercial systems designed, installed and supported from Birmingham.</p></div><div><strong>Contact</strong><a href="tel:+16592234118">(659) 223-4118</a><a href="mailto:steelcityintegrators@gmail.com">steelcityintegrators@gmail.com</a></div><div><strong>Explore</strong><a href="book.html">Consultation & support</a><a href="terms.html">Terms</a></div></div><div class="shell copyright"><span>© <span data-year></span> Steel City Integrators LLC</span><span>Birmingham, Alabama</span></div></footer>
+<script src="site.js"></script>
+<script>
+const questions=[
+ ["startup","A documented startup/shutdown checklist exists and is actually used.","No / unsure","Partly","Yes, consistently"],
+ ["monitoring","Someone can monitor what the online audience hears separately from the room.","No","Sometimes","Yes"],
+ ["recording","A local backup recording is created for important services or events.","No","Sometimes","Yes"],
+ ["network","Streaming devices use a stable, tested network path rather than relying on convenience Wi-Fi.","No","Mixed","Yes"],
+ ["broadcast","Livestream audio has a deliberate broadcast mix or processing path.","No","Partly","Yes"],
+ ["camera","Camera framing/presets are documented and repeatable.","No","Partly","Yes"],
+ ["staffing","More than one trained person can run the critical workflow.","No","Barely","Yes"],
+ ["power","Critical gear has appropriate power protection and a documented recovery/reboot plan.","No","Partly","Yes"],
+ ["documentation","Critical cabling, ports, signal paths and credentials are documented securely.","No","Partly","Yes"],
+ ["testing","A pre-service/event test verifies audio, video, stream status and recording.","Rarely","Sometimes","Every time"]
+];
+const qwrap=document.getElementById("questions");
+questions.forEach((q,i)=>{
+ const card=document.createElement("fieldset"); card.className="score-card";
+ card.innerHTML='<legend><strong>'+(i+1)+'. '+q[1]+'</strong></legend><div class="answer-grid">'+
+ [0,5,10].map((v,j)=>'<label><input type="radio" name="'+q[0]+'" value="'+v+'"> '+q[j+2]+'</label>').join("")+'</div>';
+ qwrap.appendChild(card);
+});
+document.getElementById("reliability-form").addEventListener("submit",e=>{
+ e.preventDefault(); let score=0,missing=false,weak=[];
+ questions.forEach(q=>{const checked=document.querySelector('input[name="'+q[0]+'"]:checked'); if(!checked){missing=true;return;} const v=Number(checked.value);score+=v;if(v<10)weak.push([q[1],v]);});
+ const err=document.getElementById("form-error"); if(missing){err.style.display="block";return;} err.style.display="none";
+ let tier,summary;if(score<50){tier="Critical reliability gaps";summary="Your workflow has several single points of failure. Prioritize repeatable operation, monitoring, network stability and backup before adding complexity."}
+ else if(score<70){tier="Unstable under pressure";summary="Parts of the system are working, but several gaps could become failures during a live service or important event."}
+ else if(score<85){tier="Good foundation with gaps";summary="Your workflow is generally sound. Closing the remaining documentation, backup or monitoring gaps can improve consistency."}
+ else{tier="Strong operational foundation";summary="Your answers indicate a well-structured workflow. Continue testing, documenting and maintaining the system as equipment and staff change."}
+ weak.sort((a,b)=>a[1]-b[1]);const list=document.getElementById("priority-list");list.innerHTML="";
+ (weak.length?weak.slice(0,4):[["Maintain the documented workflow and retest after system changes.",10]]).forEach(x=>{const li=document.createElement("li");li.textContent=x[0];list.appendChild(li);});
+ document.getElementById("score-value").textContent=score;document.getElementById("score-tier").textContent=tier;document.getElementById("score-summary").textContent=summary;document.getElementById("score-bar").style.width=score+"%";
+ const r=document.getElementById("score-result");r.style.display="block";r.scrollIntoView({behavior:"smooth",block:"start"});
+});
+</script>
+</body></html>
