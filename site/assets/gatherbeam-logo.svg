@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120" role="img" aria-labelledby="t d">
+<title id="t">GatherBeam</title><desc id="d">GatherBeam geometric beam mark with wordmark</desc>
+<defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0B63F6"/><stop offset="1" stop-color="#55C7FF"/></linearGradient></defs>
+<g transform="translate(8 10)">
+  <path d="M46 8 8 92h26l28-62z" fill="#0A2C68"/>
+  <path d="M49 8 82 92H58L38 43z" fill="url(#g)"/>
+  <path d="M32 58h58l12 26H20z" fill="#1786FF" opacity=".82"/>
+  <path d="M50 10 39 37l18 20 16-31z" fill="#E8F6FF" opacity=".95"/>
+</g>
+<text x="130" y="78" font-family="Inter,Arial,sans-serif" font-size="54" font-weight="750" fill="#07111F" letter-spacing="-2">GatherBeam</text>
+</svg>
