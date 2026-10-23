@@ -1,4 +1,4 @@
-name: Validate Steel City Integrators release
+name: Validate and deploy Steel City / GatherBeam site
 
 on:
   push:
@@ -7,6 +7,12 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   validate:
@@ -14,17 +20,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Validate browser JavaScript
         run: node --check site/site.js
+
       - name: Validate Apps Script bundle syntax
         run: node --check < dist/Code.gs
+
       - name: Verify generated Apps Script bundle
         run: node scripts/build-apps-script.js --check
+
       - name: Run automation tests
         run: |
           node tests/automation.test.js
           node tests/prospect-intelligence.test.js
           node tests/site.test.js
+
       - name: Check required public files
         shell: bash
         run: |
@@ -40,4 +51,32 @@ jobs:
           test -f site/healthcare-offices.html
           test -f site/trade-businesses.html
           test -f site/commercial-businesses.html
+          test -f site/gatherbeam.html
+          test -f site/gatherbeam-health-check.html
+          test -f site/gatherbeam-v2.css
+          test -f site/assets/gatherbeam-logo.svg
+          test -f site/assets/gatherbeam-logo-white.svg
+          test -f site/assets/gatherbeam-mark.svg
 
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
