@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320">
+<defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#06111F"/><stop offset="1" stop-color="#0E3E72"/></linearGradient><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#0B63F6"/><stop offset="1" stop-color="#55C7FF"/></linearGradient></defs>
+<rect width="1200" height="320" fill="url(#b)"/><circle cx="1110" cy="-20" r="280" fill="#1786FF" opacity=".12"/>
+<g transform="translate(60 55) scale(.9)"><path d="M46 8 8 92h26l28-62z" fill="#fff"/><path d="M49 8 82 92H58L38 43z" fill="url(#g)"/><path d="M32 58h58l12 26H20z" fill="#1786FF" opacity=".9"/></g><text x="170" y="126" fill="#fff" font-family="Arial" font-size="44" font-weight="700">GatherBeam</text><text x="60" y="225" fill="#fff" font-family="Arial" font-size="54" font-weight="800">Church technology, connected.</text><text x="60" y="272" fill="#AFC7DC" font-family="Arial" font-size="23">Remote diagnostics · Streaming · Support · Content · Growth</text>
+</svg>
