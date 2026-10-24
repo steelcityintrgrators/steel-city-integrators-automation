@@ -5,7 +5,7 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const site = path.join(root, 'site');
 const publicPages = [
-  'index.html','book.html','houses-of-worship.html','funeral-homes.html','daycares.html',
+  'index.html','book.html','ministrymesh.html','ministrymesh-health-check.html','church-livestream-audio-guide.html','houses-of-worship.html','funeral-homes.html','daycares.html',
   'healthcare-offices.html','trade-businesses.html','commercial-businesses.html','privacy.html','terms.html'
 ];
 
@@ -44,3 +44,13 @@ assert.ok(script.includes('SCI_PAYMENT_STATUS'));
 assert.ok(script.includes('sci_attribution'));
 console.log('site tests passed');
 
+
+const ministryHome = fs.readFileSync(path.join(site, 'ministrymesh.html'), 'utf8');
+const ministryHealth = fs.readFileSync(path.join(site, 'ministrymesh-health-check.html'), 'utf8');
+assert.match(ministryHome, /MinistryMesh\.io/, 'MinistryMesh home must use the parent brand');
+assert.match(ministryHome, /MinistryMesh Church AI/, 'MinistryMesh home must list Church AI');
+assert.match(ministryHome, /no live church data/i, 'prototype visuals must not imply live analytics');
+assert.doesNotMatch(ministryHome, /GatherBeam/i, 'current MinistryMesh home must not display the retired brand');
+assert.doesNotMatch(ministryHealth, /GatherBeam/i, 'current health-check page must not display the retired brand');
+assert.match(fs.readFileSync(path.join(site, 'gatherbeam.html'), 'utf8'), /ministrymesh\.html/, 'legacy URL must forward to MinistryMesh');
+console.log('MinistryMesh brand checks passed.');

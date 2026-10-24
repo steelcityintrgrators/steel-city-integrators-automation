@@ -1,4 +1,4 @@
-name: Validate and deploy Steel City / GatherBeam site
+name: Validate and deploy Steel City / MinistryMesh site
 
 on:
   push:
@@ -51,6 +51,14 @@ jobs:
           test -f site/healthcare-offices.html
           test -f site/trade-businesses.html
           test -f site/commercial-businesses.html
+          test -f site/ministrymesh.html
+          test -f site/ministrymesh-health-check.html
+          test -f site/ministrymesh-v2.css
+          test -f site/ministrymesh.css
+          test -f site/assets/ministrymesh-logo.svg
+          test -f site/assets/ministrymesh-logo-white.svg
+          test -f site/assets/ministrymesh-mark.svg
+          test -f site/assets/ministrymesh-hero.svg
           test -f site/gatherbeam.html
           test -f site/gatherbeam-health-check.html
           test -f site/gatherbeam-v2.css
