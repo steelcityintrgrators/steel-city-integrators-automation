@@ -1,0 +1,43 @@
+{
+  "version": "0.1-pilot",
+  "classification": ["REMOTE_READY","REMOTE_READY_WITH_MODIFICATIONS","PARTIALLY_REMOTE","ONSITE_REQUIRED"],
+  "ticketTypes": ["SELF_SERVICE","REMOTE_DIAGNOSTIC","REMOTE_TECHNICIAN","ONSITE_TECHNICIAN","PROJECT_INSTALLATION","EMERGENCY_ESCALATION"],
+  "session": {
+    "customer_id": null,
+    "campus_id": null,
+    "room_id": null,
+    "system_id": null,
+    "ticket_id": null,
+    "session_id": null,
+    "technician_id": null,
+    "customer_approver": null,
+    "authorization_timestamp": null,
+    "access_window": {"start": null, "end": null},
+    "approved_devices": [],
+    "approved_scope": [],
+    "pre_change_artifacts": [],
+    "changes": [],
+    "verification": {"test": null, "result": null},
+    "rollback": {"required": false, "performed": false, "artifact": null},
+    "customer_summary": null,
+    "follow_up": null,
+    "escalation": null
+  },
+  "travelQuote": {
+    "customer_location": null,
+    "assigned_technician_origin": null,
+    "travel_category": null,
+    "transportation": null,
+    "travel_hours": null,
+    "onsite_labor_hours": null,
+    "lodging": null,
+    "local_transport": null,
+    "parking_tolls": null,
+    "per_diem": null,
+    "shipping_freight": null,
+    "special_tools": null,
+    "additional_technicians": null,
+    "after_hours_overtime": null,
+    "contingency": null
+  }
+}
