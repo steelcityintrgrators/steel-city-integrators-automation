@@ -1,68 +1,105 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GatherBeam | Church Technology, Connected</title>
-<meta name="description" content="GatherBeam helps churches diagnose, fix, stream, create, reach and grow through one intelligent church technology platform.">
+<meta name="description" content="GatherBeam brings church livestream diagnostics, streaming, church relationship tools, and growth services under one beta-aware ecosystem.">
 <meta name="theme-color" content="#07111f">
 <link rel="icon" href="/site/assets/gatherbeam-mark.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/site/gatherbeam-v2.css">
-<script>function initApollo(){var n=Math.random().toString(36).substring(7),o=document.createElement("script");o.src="https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache="+n,o.async=!0,o.defer=!0,o.onload=function(){window.trackingFunctions.onLoad({appId:"6adc18da1de206001c0bf232"})},document.head.appendChild(o)}initApollo();</script></head>
+<style>
+.beta-label{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#fff0d8;color:#754500;font-size:10px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.pilot-label{background:#e7f2ff;color:#075ec7}
+.ecosystem{padding:84px 0;background:#f7fafd}
+.eco-heading{max-width:820px;margin-bottom:34px}
+.eco-heading h2{font-size:clamp(38px,4.8vw,58px);line-height:1.02;letter-spacing:-.045em;margin:12px 0}
+.eco-heading p{font-size:17px;color:#5e748c}
+.eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.eco-card{padding:24px;background:#fff;border:1px solid #dce7f1;border-radius:20px;min-height:230px}
+.eco-card h3{margin:12px 0 8px;font-size:23px;letter-spacing:-.025em}
+.eco-card p{margin:0;color:#5e748c;font-size:15px}
+.eco-card ul{padding-left:18px;color:#425971;font-size:14px}
+.eco-note{margin-top:24px;padding:16px 18px;border-left:3px solid #f0a12b;background:#fff8ed;color:#5c4b31}
+.journey{padding:76px 0;background:#081827;color:#fff}
+.journey-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.journey-step{padding:18px 16px;border-top:2px solid #2484f7;background:#0d2033}
+.journey-step b{display:block;margin-bottom:7px;color:#fff}
+.journey-step p{margin:0;color:#adc1d4;font-size:13px}
+.status-copy{font-size:12px;color:#657d95;margin-top:10px}
+@media(max-width:900px){.eco-grid{grid-template-columns:repeat(2,1fr)}.journey-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.eco-grid,.journey-grid{grid-template-columns:1fr}.ecosystem,.journey{padding:58px 0}.eco-card{min-height:0}}
+</style>
+</head>
 <body>
 <header class="topnav"><div class="shell navrow">
-<a class="brand" href="/"><img src="/site/assets/gatherbeam-logo.svg" alt="GatherBeam"></a>
-<nav class="navlinks" aria-label="Primary navigation"><a href="#platform">Platform</a><a href="#services">Support Tiers</a><a href="/remote-ready">Remote Ready</a><a href="/onsite">Onsite</a></nav>
-<div class="nav-actions"><a class="signin" href="/access">Access</a><a class="btn primary" href="/health-check">Get Started</a></div>
+<a class="brand" href="/" aria-label="GatherBeam home"><img src="/site/assets/gatherbeam-logo.svg" alt="GatherBeam"></a>
+<nav class="navlinks" aria-label="Primary navigation"><a href="#ecosystem">Ecosystem</a><a href="#services">Services</a><a href="#beta">Beta roadmap</a><a href="/onsite">Onsite</a></nav>
+<div class="nav-actions"><a class="btn primary" href="/health-check">Request Health Check</a></div>
 </div></header>
-
 <main>
 <section class="hero">
-<div class="stage-scene" aria-hidden="true"><div class="lights"><i></i><i></i><i></i><i></i><i></i></div><div class="stage"></div><div class="screen"></div><div class="cross"></div><div class="camera"></div><div class="tripod"></div><div class="monitor"><div class="monitor-head"><span>GatherBeam Control</span><span class="live">LIVE</span></div><div class="monitor-main"><div class="preview"></div><div class="watching"><strong>4.2K</strong><span>watching</span></div></div><div class="thumbs"><i></i><i></i><i></i><i></i></div></div></div>
 <div class="shell hero-inner"><div class="hero-copy">
 <div class="eyebrow">Church technology. Connected.</div>
 <h1>From Sanctuary<br>to <span>Everyone.</span></h1>
-<p>GatherBeam helps churches diagnose, fix, stream, create, reach, and grow — all through one intelligent platform.</p>
-<div class="hero-actions"><a class="btn primary" href="/health-check">Get a Livestream & AV Health Check →</a><a class="btn outline" href="#platform">▶ See How It Works</a></div>
-<div class="hero-proof"><b>Remote-First</b><b>AI-Powered</b><b>Church-Focused</b><b>Global Support</b></div>
+<p>One GatherBeam ecosystem for better church streaming, stronger connections with visitors, and sustainable community growth. Steel City Integrators LLC is the operating company behind GatherBeam.</p>
+<div class="hero-actions"><a class="btn primary" href="/health-check">Request the $149 Health Check →</a><a class="btn outline" href="#ecosystem">Explore GatherBeam</a></div>
+<div class="hero-proof"><b>Remote-first diagnostics</b><b>Church-focused tools</b><b>One connected roadmap</b></div>
+<p class="status-copy">The Health Check is offered as a founding pilot. Other product branches are in beta and are not represented as generally available.</p>
 </div></div>
 </section>
 
-<section class="module-strip" id="platform">
-<div class="module-label">A complete church technology platform</div>
+<section class="module-strip" id="ecosystem">
+<div class="module-label">One umbrella · six connected systems · each branch stays beta until complete</div>
 <div class="shell modules">
-<div class="module"><div class="icon">⌁</div><strong>Remote</strong><span>Diagnostics & Support</span></div>
-<div class="module"><div class="icon">◉</div><strong>Live Streaming</strong><span>& Broadcast</span></div>
-<div class="module"><div class="icon">▣</div><strong>Managed Hardware</strong><span>BeamBox</span></div>
-<div class="module"><div class="icon">▶</div><strong>Your Church Channel</strong><span>Web, Mobile, TV</span></div>
-<div class="module"><div class="icon">≡</div><strong>Content Intelligence</strong><span>Clips, Social, Podcast</span></div>
-<div class="module"><div class="icon">▥</div><strong>Church Growth</strong><span>& Visitor Follow-Up</span></div>
-<div class="module"><div class="icon">◇</div><strong>Training & Education</strong><span>Teams & Volunteers</span></div>
-<div class="module"><div class="icon">⚙</div><strong>Onsite Services</strong><span>Premium Integration</span></div>
+<div class="module"><div class="icon">⌁</div><strong>LeadFlow</strong><span>Church discovery &amp; qualified opportunities · BETA</span></div>
+<div class="module"><div class="icon">▤</div><strong>CRM</strong><span>Church contacts &amp; visitor follow-up · BETA</span></div>
+<div class="module"><div class="icon">▣</div><strong>BeamBox</strong><span>Church streaming device · BETA</span></div>
+<div class="module"><div class="icon">▶</div><strong>Stream</strong><span>Smart TV, phone &amp; app streaming · BETA</span></div>
+<div class="module"><div class="icon">▥</div><strong>Growth</strong><span>Marketing &amp; growth management · BETA</span></div>
+<div class="module"><div class="icon">⚙</div><strong>Ops</strong><span>Onboarding, delivery &amp; support · BETA</span></div>
 </div>
 </section>
 
-<section class="showcase" id="about"><div class="shell showcase-grid">
-<div class="device-scene" aria-label="GatherBeam platform visualization">
-<div class="dash"><div class="dash-title"><strong>GatherBeam</strong><span>Church Dashboard</span></div><div class="dash-grid"><div class="side-nav"><span>Dashboard</span><span>Streaming</span><span>Devices</span><span>Support</span><span>Content</span><span>Growth</span><span>Visitors</span><span>Analytics</span><span>Training</span></div><div class="stats"><div class="stat"><small>Watching now</small><strong>1.2K</strong></div><div class="stat"><small>Stream health</small><strong>Excellent</strong></div><div class="stat"><small>Devices</small><strong>12/12</strong></div><div class="stat"><small>Support</small><strong>Ready</strong></div><div class="chart"></div></div></div></div>
-<div class="channel"><h4>Your Church</h4><div class="hero-tile"></div><ul><li>Watch Live</li><li>Sermons</li><li>Events</li><li>Give</li><li>Plan Your Visit</li></ul></div>
-<div class="beambox">▲ GatherBeam</div>
+<section class="ecosystem">
+<div class="shell">
+<div class="eco-heading"><span class="pill">WHAT GATHERBEAM WILL OFFER</span><h2>Start with the need.<br>Grow into the whole system.</h2><p>GatherBeam combines remote-first technical help with tools for streaming, church communication, visitor follow-up, and growth. We are building and validating each branch separately.</p></div>
+<div class="eco-grid">
+<article class="eco-card"><span class="beta-label pilot-label">Founding pilot</span><h3>Livestream &amp; AV Health Check</h3><p>A $149 remote review of one recent service, current equipment/settings, and your biggest recurring issue. Receive prioritized findings across audio, video, streaming, network, graphics, and workflow.</p><p class="status-copy">Starts with the system you already have. Equipment, guaranteed fixes, and onsite work are outside the pilot scope.</p></article>
+<article class="eco-card"><span class="beta-label">BETA</span><h3>GatherBeam LeadFlow</h3><p>Church discovery, local opportunity mapping, evidence-based livestream reviews, and a clear path from a need to the right next step.</p><p class="status-copy">A watchlist is not a diagnosis. Findings require direct review and evidence.</p></article>
+<article class="eco-card"><span class="beta-label">BETA</span><h3>GatherBeam CRM</h3><p>Church relationship tools for contacts, inquiries, visitor interest, consented follow-up, service history, and reporting.</p><p class="status-copy">Each church’s visitor records stay private to that church workspace.</p></article>
+<article class="eco-card"><span class="beta-label">BETA</span><h3>GatherBeam BeamBox</h3><p>A church-oriented streaming device and setup designed around a validated production workflow.</p><p class="status-copy">Supported equipment, setup, pricing, and support will be published after a working pilot is validated.</p></article>
+<article class="eco-card"><span class="beta-label">BETA</span><h3>GatherBeam Stream</h3><p>Branded streaming software for smart TVs, phones, and apps, including a church channel experience for live and on-demand services.</p><p class="status-copy">Platform compatibility will be listed only after end-to-end testing.</p></article>
+<article class="eco-card"><span class="beta-label">BETA</span><h3>GatherBeam Growth</h3><p>Marketing and growth management for churches: goals, content, campaigns, visitor journeys, approved integrations, and outcome insights.</p><p class="status-copy">Churches approve content and account activity. Live publishing and messaging require authorization.</p></article>
 </div>
-<div class="showcase-copy"><div class="eyebrow">Built for churches of every size</div><h2>One Platform.<br>Real Ministry <span>Impact.</span></h2><p>Whether you need a quick fix, reliable streaming, a complete media channel, or a long-term growth partner, GatherBeam gives your church the tools, support, and technology to reach more people with the message that matters most.</p><a class="btn primary" href="/health-check">Explore GatherBeam Remote →</a><div class="impact"><div><small>Better services</small><strong>Clearer audio & video</strong></div><div><small>Less stress</small><strong>Reliable technology</strong></div><div><small>More reach</small><strong>In-person + online</strong></div><div><small>Greater impact</small><strong>More lives touched</strong></div></div></div>
-</div></section>
+<div class="eco-note" id="beta"><strong>Beta policy:</strong> every branch remains marked BETA until its core workflow is built, connected, and validated. Concepts, mockups, and plans do not count as completed products.</div>
+</div>
+</section>
 
 <section class="service-tiers" id="services"><div class="shell">
-<div class="tier-heading"><span class="pill">CHOOSE HOW MUCH HELP YOU NEED</span><h2>Diagnose it. Fix it remotely. Keep it managed. Go onsite when necessary.</h2><p>GatherBeam routes each church toward the least expensive effective path. Remote technician work requires a qualified Remote Ready system; onsite service is quoted with location and travel costs included.</p></div>
+<div class="tier-heading"><span class="pill">SERVICE PATH</span><h2>Diagnose first. Choose the right next step.</h2><p>The founding pilot starts remotely. Follow-on work is scoped separately and offered only when the diagnosis supports it.</p></div>
 <div class="tier-grid">
-<article class="tier-card"><div class="tier-number">Tier 1 · Diagnose</div><h3>Health Check</h3><p>Structured review of the church technology you already have.</p><ul><li>Livestream / service review</li><li>Prioritized findings</li><li>Remote-vs-onsite recommendation</li></ul><a class="btn primary" href="/health-check">$149 Founding Pilot →</a></article>
-<article class="tier-card featured"><div class="tier-number">Tier 2 · Assist</div><h3>Remote Technician</h3><p>A qualified GatherBeam technician securely connects to approved systems and makes authorized adjustments.</p><ul><li>Remote Ready qualification</li><li>Pre-change snapshot</li><li>Documented technician session</li></ul><a class="btn primary" href="/remote-optimization">Explore Remote Technician →</a><p class="tier-note">Requires a qualified remote-ready system.</p></article>
-<article class="tier-card"><div class="tier-number">Tier 3 · Managed</div><h3>Recurring Support</h3><p>Ongoing troubleshooting, documentation, remote review, configuration history and escalation management.</p><ul><li>Support ticket triage</li><li>Remote troubleshooting</li><li>System history that improves over time</li></ul><a class="btn primary" href="/managed-support">Join Managed Pilot →</a><p class="tier-note">Subscription pricing is being validated.</p></article>
-<article class="tier-card dark"><div class="tier-number">Tier 4 · Onsite</div><h3>Technician Dispatch</h3><p>Physical intervention for installation, cabling, replacement, commissioning and problems that cannot be solved remotely.</p><ul><li>Scope-matched technician</li><li>Location-aware travel quote</li><li>Regional / fly-in escalation</li></ul><a class="btn primary" href="/onsite">Request Onsite Help →</a><p class="tier-note">Travel and related expenses depend on location and technician availability.</p></article>
-</div></div></section>
-<section style="padding:38px 0;background:#eef6ff;border-top:1px solid #d9e8f6;border-bottom:1px solid #d9e8f6"><div class="shell" style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap"><div><div class="eyebrow">NOT SURE WHAT YOU NEED?</div><h2 style="margin:6px 0 0;font-size:clamp(28px,4vw,42px);letter-spacing:-.035em">Start with the $149 Health Check.</h2></div><a class="btn primary" href="/health-check">Diagnose My Church System →</a></div></section><section class="pilot" id="pilot"><div class="shell pilot-grid">
-<div><span class="pill">AVAILABLE NOW · FOUNDING PILOT</span><h2>Start with the church technology you already have.</h2><p>The first GatherBeam product is remote by design: submit a recent service, equipment details and your biggest technical problem. We review the evidence and return a prioritized action plan before recommending new equipment or an onsite visit.</p><a class="btn primary" href="/health-check">See the Health Check →</a></div>
-<div class="price-card"><span class="pill">GATHERBEAM REMOTE</span><div class="price">$149 <small>founding pilot</small></div><ul><li>One recent livestream or service reviewed</li><li>Audio, camera, streaming and workflow analysis</li><li>Prioritized findings and recommended corrections</li><li>Remote-vs-onsite recommendation</li><li>Written next-step summary</li></ul><a class="btn primary" href="/health-check">Get Started →</a></div>
+<article class="tier-card featured"><div class="tier-number">FOUNDING PILOT · $149</div><h3>Health Check</h3><p>Review one recent service, the existing system, and the church’s priority concern. Receive a written summary and prioritized next steps.</p><a class="btn primary" href="/health-check">Request the Pilot →</a><p class="status-copy">Request and qualification flow; payment confirmation is handled separately.</p></article>
+<article class="tier-card"><div class="tier-number">BETA</div><h3>Remote Optimization</h3><p>Separately scoped, authorized help for eligible audio, camera, streaming, or network configuration.</p><p class="status-copy">Secure remote access must be available and approved before changes.</p></article>
+<article class="tier-card"><div class="tier-number">BETA</div><h3>Managed Support</h3><p>Ongoing troubleshooting, system notes, follow-up, and escalation planning for churches that need a continuing technology partner.</p><p class="status-copy">Service scope and pricing are being validated.</p></article>
+<article class="tier-card dark"><div class="tier-number">BETA · BY PROJECT</div><h3>Onsite Integration</h3><p>Physical installation, cabling, commissioning, or repair through Steel City Integrators LLC when remote work is not suitable.</p><p class="status-copy">Quoted by scope and location, including applicable travel costs.</p></article>
+</div>
+</div></section>
+
+<section class="journey"><div class="shell">
+<div class="tier-heading"><span class="pill">HOW THE ECOSYSTEM CONNECTS</span><h2>One church journey. Connected systems.</h2></div>
+<div class="journey-grid">
+<div class="journey-step"><b>1. Discover</b><p>LeadFlow identifies a church need and records evidence.</p></div>
+<div class="journey-step"><b>2. Connect</b><p>CRM tracks the church relationship and approved next step.</p></div>
+<div class="journey-step"><b>3. Diagnose</b><p>The Health Check reviews the current stream and technology.</p></div>
+<div class="journey-step"><b>4. Deliver</b><p>Authorized support, Stream, BeamBox, or Growth tools address the validated need.</p></div>
+<div class="journey-step"><b>5. Improve</b><p>Service and growth outcomes inform support, follow-up, and the next plan.</p></div>
+</div>
 </div></section>
 </main>
-
-<footer class="footer"><div class="shell"><div class="footer-grid"><div><img src="/site/assets/gatherbeam-logo-white.svg" alt="GatherBeam"><p>Church technology, connected.</p></div><div><strong>Platform</strong><a href="#services">Support Tiers</a><a href="/health-check">Health Check</a><a href="/remote-ready">Remote Ready</a><a href="/onsite">Onsite</a></div><div><strong>Operator</strong><a href="/">Steel City Integrators LLC</a><a href="/site/privacy.html">Privacy</a><a href="/site/terms.html">Terms</a></div></div><div class="legal">GatherBeam is a founding-pilot brand operated by Steel City Integrators LLC while the remote-first church technology product is validated. Roadmap capabilities are not represented as generally available unless explicitly labeled available.</div></div></footer>
+<footer class="footer"><div class="shell"><div class="footer-grid">
+<div><img src="/site/assets/gatherbeam-logo-white.svg" alt="GatherBeam"><p>Church technology, connected.</p></div>
+<div><strong>GatherBeam</strong><a href="#ecosystem">Ecosystem</a><a href="#services">Services</a><a href="/health-check">Health Check</a></div>
+<div><strong>Operating company</strong><a href="/">Steel City Integrators LLC</a><a href="/site/privacy.html">Privacy</a><a href="/site/terms.html">Terms</a></div>
+</div><div class="legal">GatherBeam is operated by Steel City Integrators LLC. Product branches marked BETA are in development or validation and are not represented as generally available.</div></div></footer>
 </body></html>
