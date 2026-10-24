@@ -1,15 +1,4 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/", "destination": "/site/gatherbeam.html" },
-    { "source": "/health-check", "destination": "/site/gatherbeam-health-check.html" },
-    { "source": "/gatherbeam", "destination": "/site/gatherbeam.html" },
-    { "source": "/assets/:path*", "destination": "/site/assets/:path*" },
-    { "source": "/gatherbeam-v2.css", "destination": "/site/gatherbeam-v2.css" },
-    { "source": "/gatherbeam.css", "destination": "/site/gatherbeam.css" },
-    { "source": "/houses-of-worship", "destination": "/site/houses-of-worship.html" },
-    { "source": "/privacy", "destination": "/site/privacy.html" },
-    { "source": "/terms", "destination": "/site/terms.html" }
-  ]
+  "trailingSlash": false
 }
