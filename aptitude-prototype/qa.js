@@ -56,6 +56,16 @@ for (const required of [
   if (!html.includes(required)) fail('Required safeguard missing: ' + required);
 }
 
+const analyzerPath='aptitude-prototype/pilot-analyzer.html';
+if (!fs.existsSync(analyzerPath)) fail('Pilot analyzer is missing.');
+const analyzer=fs.readFileSync(analyzerPath,'utf8');
+for (const required of ['Pilot Analyzer','LOCAL ANALYTICS • PILOT ONLY','function exportSummary()']) {
+  if (!analyzer.includes(required)) fail('Pilot analyzer safeguard missing: '+required);
+}
+for (const forbidden of ['XMLHttpRequest','navigator.sendBeacon']) {
+  if (analyzer.includes(forbidden)) fail('Pilot analyzer contains network-capable code: '+forbidden);
+}
+
 console.log('QA PASS:', {
   questions: bank.length,
   domains: domains.size,
