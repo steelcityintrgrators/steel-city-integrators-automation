@@ -46,13 +46,13 @@ button{border:0;border-radius:14px;padding:13px 15px;font-weight:800;cursor:poin
       <div class="row"><div><h2>Item diagnostics</h2><p class="small">Review flags activate only after at least 10 responses to an item.</p></div><div style="text-align:right"><button class="ghost" onclick="exportSummary()">Export analytics JSON</button></div></div>
       <div class="tablewrap">
         <table>
-          <thead><tr><th>Item</th><th>Domain</th><th>Level</th><th>N</th><th>% correct</th><th>Median sec</th><th>Flag</th></tr></thead>
+          <thead><tr><th>Item</th><th>Domain</th><th>Level</th><th>N</th><th>% correct</th><th>Discrimination</th><th>Option share A/B/C/D</th><th>Median sec</th><th>Flag</th></tr></thead>
           <tbody id="items"></tbody>
         </table>
       </div>
     </div>
 
-    <div class="notice"><b>Interpretation:</b> Very high or low percent-correct values can indicate an item is too easy or too hard for this pilot sample, but they do not by themselves prove a bad item. Review construct relevance, distractor behavior, sample composition, and later discrimination/fairness evidence before retiring an item.</div>
+    <div class="notice"><b>Interpretation:</b> Difficulty is percent correct. Discrimination is an exploratory Pearson association between item correctness and the participant's weighted score on the rest of the assessment. Negative or very low values deserve review, but no single statistic proves an item is bad. Inspect construct relevance, distractor behavior, timing, sample composition, and later fairness evidence before retiring an item.</div>
   </div>
 </div>
 <script>
@@ -65,6 +65,14 @@ function median(values){
   return a.length%2?a[m]:(a[m-1]+a[m])/2;
 }
 function pct(n,d){return d?Math.round(100*n/d):0}
+function pearson(pairs){
+  if(!pairs||pairs.length<3)return null;
+  const xs=pairs.map(p=>p.x),ys=pairs.map(p=>p.y),mx=xs.reduce((a,b)=>a+b,0)/xs.length,my=ys.reduce((a,b)=>a+b,0)/ys.length;
+  let num=0,dx=0,dy=0;
+  for(let i=0;i<pairs.length;i++){const a=xs[i]-mx,b=ys[i]-my;num+=a*b;dx+=a*a;dy+=b*b}
+  if(dx===0||dy===0)return null;
+  return num/Math.sqrt(dx*dy);
+}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 
 async function analyze(){
@@ -97,8 +105,15 @@ async function analyze(){
       const a=domainAgg.get(x.domain);a.scores.push(Number(x.score));a.sessions++;
     });
     (s.answers||[]).forEach(a=>{
-      if(!itemAgg.has(a.id))itemAgg.set(a.id,{id:a.id,domain:a.domain,difficulty:a.difficulty,n:0,correct:0,times:[]});
+      if(!itemAgg.has(a.id))itemAgg.set(a.id,{id:a.id,domain:a.domain,difficulty:a.difficulty,n:0,correct:0,times:[],selected:[0,0,0,0],pairs:[]});
       const x=itemAgg.get(a.id);x.n++;if(a.correct)x.correct++;if(Number.isFinite(a.ms))x.times.push(a.ms/1000);
+      if(Number.isInteger(a.selected)&&a.selected>=0&&a.selected<4)x.selected[a.selected]++;
+      const rest=(s.answers||[]).filter(b=>b.id!==a.id);
+      const possible=rest.reduce((sum,b)=>sum+(Number(b.difficulty)||0),0);
+      if(possible>0){
+        const earned=rest.reduce((sum,b)=>sum+(b.correct?(Number(b.difficulty)||0):0),0);
+        x.pairs.push({x:a.correct?1:0,y:100*earned/possible});
+      }
     });
   });
 
@@ -125,15 +140,19 @@ async function analyze(){
   const rows=[...itemAgg.values()].sort((a,b)=>a.domain.localeCompare(b.domain)||String(a.id).localeCompare(String(b.id)));
   const tbody=document.getElementById('items');tbody.innerHTML='';
   rows.forEach(x=>{
-    const pc=pct(x.correct,x.n),med=x.times.length?Math.round(median(x.times)*10)/10:null;
+    const pc=pct(x.correct,x.n),med=x.times.length?Math.round(median(x.times)*10)/10:null,disc=pearson(x.pairs);
+    x.discrimination=disc;x.optionPercentages=x.selected.map(n=>pct(n,x.n));
     let flag='Need more data',cls='wait';
     if(x.n>=10){
       if(pc<30){flag='Review: very hard';cls='review'}
       else if(pc>90){flag='Review: very easy';cls='review'}
+      else if(x.n>=20&&disc!==null&&disc<0){flag='Review: negative discrimination';cls='review'}
+      else if(x.n>=20&&disc!==null&&disc<0.15){flag='Review: low discrimination';cls='review'}
       else{flag='Monitor';cls='ok'}
     }
     const tr=document.createElement('tr');
-    tr.innerHTML='<td>'+escapeHtml(x.id)+'</td><td>'+escapeHtml(x.domain)+'</td><td>'+escapeHtml(x.difficulty)+'</td><td>'+x.n+'</td><td>'+pc+'%</td><td>'+(med??'—')+'</td><td><span class="flag '+cls+'">'+flag+'</span></td>';
+    const discText=disc===null?'—':disc.toFixed(2),optionText=x.optionPercentages.map((p,i)=>String.fromCharCode(65+i)+':'+p+'%').join(' ');
+    tr.innerHTML='<td>'+escapeHtml(x.id)+'</td><td>'+escapeHtml(x.domain)+'</td><td>'+escapeHtml(x.difficulty)+'</td><td>'+x.n+'</td><td>'+pc+'%</td><td>'+discText+'</td><td>'+optionText+'</td><td>'+(med??'—')+'</td><td><span class="flag '+cls+'">'+flag+'</span></td>';
     tbody.appendChild(tr);
   });
 
@@ -146,7 +165,7 @@ async function analyze(){
     averageComposite:avgComposite,
     medianMinutes,
     domains:Object.fromEntries([...domainAgg.entries()].filter(([,a])=>a.scores.length).map(([d,a])=>[d,{n:a.sessions,averageScore:Math.round(a.scores.reduce((x,y)=>x+y,0)/a.scores.length)}])),
-    items:rows.map(x=>({id:x.id,domain:x.domain,difficulty:x.difficulty,n:x.n,percentCorrect:pct(x.correct,x.n),medianSeconds:x.times.length?Math.round(median(x.times)*10)/10:null}))
+    items:rows.map(x=>({id:x.id,domain:x.domain,difficulty:x.difficulty,n:x.n,percentCorrect:pct(x.correct,x.n),discrimination:x.discrimination===null?null:Math.round(x.discrimination*1000)/1000,optionPercentages:x.optionPercentages,medianSeconds:x.times.length?Math.round(median(x.times)*10)/10:null}))
   };
 
   if(versions.length>1||banks.length>1||scorings.length>1){
