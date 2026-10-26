@@ -1,0 +1,26 @@
+name: Validate Secure Aptitude Prototype
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "aptitude-secure/**"
+      - ".github/workflows/aptitude-secure-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "aptitude-secure-qa"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run secure prototype QA
+        working-directory: aptitude-secure
+        run: node qa.js
