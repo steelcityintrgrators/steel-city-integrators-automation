@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#0a0f1f" />
+<title>Aptitude Intelligence Prototype</title>
+<style>
+:root{--bg:#080d1b;--panel:#10182d;--panel2:#0d1426;--text:#f7f9fc;--muted:#98a7c2;--line:#27324d;--accent:#76d5ff;--accent2:#a7f3d0;--warn:#fde68a;--danger:#fda4af;--good:#86efac}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 20% -20%,#1b2c50 0,#0b1121 35%,#080d1b 70%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.shell{max-width:980px;margin:auto;padding:18px 14px 56px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.brand{font-weight:800;letter-spacing:-.02em}
+.nav-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.pill,.ghost,.primary,.danger{border-radius:999px;border:1px solid var(--line);padding:10px 14px;font-weight:700}
+.ghost{background:transparent;color:var(--text)} .primary{background:var(--accent);color:#06101c;border-color:transparent} .danger{background:transparent;color:var(--danger);border-color:#5b2a37}
+.view{display:none} .view.active{display:block}
+.hero{padding:28px 0 10px}
+h1{font-size:clamp(36px,8vw,70px);line-height:.96;letter-spacing:-.05em;margin:10px 0 18px;max-width:800px}
+h2{font-size:clamp(25px,5vw,36px);letter-spacing:-.03em;margin:0 0 12px} h3{margin:0 0 8px}
+p{color:var(--muted);line-height:1.55}
+.card{background:linear-gradient(180deg,rgba(16,24,45,.96),rgba(12,20,38,.96));border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 20px 55px rgba(0,0,0,.22)}
+.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:14px} .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px} .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:760px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.nav{align-items:flex-start}}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:14px} .stat .k{font-size:12px;color:var(--muted)} .stat .v{font-size:24px;font-weight:800;margin-top:3px}
+label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}
+input,select{width:100%;padding:14px 15px;border-radius:12px;border:1px solid var(--line);background:#091123;color:var(--text);outline:none}
+input:focus,select:focus{border-color:var(--accent)}
+.spacer{height:12px} .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .row>*{flex:1}
+.notice{padding:12px 14px;border-radius:14px;background:#161925;border:1px solid #443f2c;color:#e8e1c3;font-size:13px;line-height:1.45}
+.small{font-size:12px;color:var(--muted)}
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:10px} .badge{border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:7px 10px;font-size:12px;white-space:nowrap}
+.progress{height:8px;background:#071020;border-radius:999px;overflow:hidden;margin:14px 0 18px} .progress>i{display:block;height:100%;background:var(--accent);width:0}
+.question{font-size:clamp(21px,4vw,28px);line-height:1.32;font-weight:750;margin:8px 0 16px}
+.choice{width:100%;display:block;text-align:left;padding:14px 15px;margin:9px 0;border-radius:14px;border:1px solid var(--line);background:#0a1327;color:var(--text);font-weight:650}
+.choice:hover{border-color:#405179} .choice.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(118,213,255,.18);background:#10213d}
+.scorehero{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:14px 0} .score{font-size:58px;font-weight:900;letter-spacing:-.06em}
+.result-row{padding:14px 0;border-bottom:1px solid var(--line)} .result-row:last-child{border:0}
+.meter{height:9px;background:#071020;border-radius:999px;overflow:hidden;margin-top:7px} .meter i{display:block;height:100%;background:var(--accent2)}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:16px} table{border-collapse:collapse;width:100%;min-width:620px} th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font-size:13px} th{color:var(--muted);font-weight:700;background:#0b1428}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:6px;margin-bottom:14px} .tab{white-space:nowrap;background:#0b1428;border:1px solid var(--line);color:var(--text);padding:9px 12px;border-radius:999px;font-weight:700} .tab.active{background:var(--accent);color:#06101c;border-color:transparent}
+.admin-pane{display:none} .admin-pane.active{display:block}
+.kpi{font-size:30px;font-weight:900;letter-spacing:-.04em}
+.candidate{padding:14px;border:1px dashed #405179;border-radius:16px;background:#0a1327}
+.footer{margin-top:26px;color:#6f7f9d;font-size:12px}
+@media print{body{background:#fff;color:#111}.nav,.no-print{display:none!important}.card{background:#fff;border:1px solid #ccc;box-shadow:none}p,.small,.badge,label{color:#444}.meter{background:#eee}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="nav">
+    <div class="brand">Aptitude Intelligence <span class="badge">Prototype v0.2</span></div>
+    <div class="nav-actions no-print">
+      <button class="ghost" onclick="go('home')">Home</button>
+      <button class="ghost" onclick="go('admin')">Admin</button>
+    </div>
+  </div>
+
+  <section id="home" class="view active">
+    <div class="hero">
+      <div class="badge">PRIVATE TESTING BUILD</div>
+      <h1>Find how a person thinks, learns, and solves.</h1>
+      <p style="max-width:760px">A working adaptive aptitude prototype with eight domains, dynamic difficulty, saved test attempts, and a local admin dashboard. It is for product testing—not validated hiring, diagnostic, IQ, or school-placement use.</p>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Start a test</h2>
+        <label>Participant name or test ID</label>
+        <input id="participant" placeholder="Test User 001" autocomplete="off" />
+        <label>Test length</label>
+        <select id="length">
+          <option value="16">Quick prototype — 16 questions</option>
+          <option value="24">Standard prototype — 24 questions</option>
+          <option value="40" selected>Full prototype — 40 questions</option>
+        </select>
+        <div class="spacer"></div>
+        <button class="primary" style="width:100%;border-radius:14px;padding:15px" onclick="startTest()">Begin adaptive assessment</button>
+        <div class="spacer"></div>
+        <div class="notice">Scores are internal prototype indices. They are not percentiles and should not be presented as scientifically validated aptitude scores.</div>
+      </div>
+      <div class="card">
+        <h3>What this build tests</h3>
+        <div class="grid2" style="grid-template-columns:1fr 1fr">
+          <div class="stat"><div class="k">Domains</div><div class="v">8</div></div>
+          <div class="stat"><div class="k">Question bank</div><div class="v">64</div></div>
+          <div class="stat"><div class="k">Difficulty</div><div class="v">1–3</div></div>
+          <div class="stat"><div class="k">Storage</div><div class="v">Local</div></div>
+        </div>
+        <p class="small">The app runs as a self-contained HTML file. Attempts are saved only in the browser on the device where the file is opened.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="test" class="view">
+    <div class="card">
+      <div class="qhead"><span id="qcount" class="small"></span><span id="qdomain" class="badge"></span></div>
+      <div class="progress"><i id="qprog"></i></div>
+      <div id="qlevel" class="small"></div>
+      <div id="qtext" class="question"></div>
+      <div id="qchoices"></div>
+      <div class="spacer"></div>
+      <button id="continueBtn" class="primary" style="width:100%;border-radius:14px;padding:15px" disabled onclick="submitAnswer()">Continue</button>
+    </div>
+  </section>
+
+  <section id="results" class="view">
+    <div class="card">
+      <div class="qhead"><span class="badge">PROVISIONAL PROFILE</span><span id="elapsed" class="small"></span></div>
+      <div class="scorehero"><div><h2 id="resultName">Aptitude profile</h2><p id="resultSummary" style="margin:0"></p></div><div class="score" id="composite">—</div></div>
+      <div id="resultBars"></div>
+      <div class="notice" style="margin-top:16px"><b>Interpretation limit:</b> This prototype measures performance on its current item bank only. Norms, reliability, item discrimination, bias testing, and criterion validity have not yet been established.</div>
+      <div class="row no-print" style="margin-top:14px"><button class="primary" onclick="window.print()">Print / save report</button><button class="ghost" onclick="go('home')">Run another test</button></div>
+    </div>
+  </section>
+
+  <section id="admin" class="view">
+    <div class="card">
+      <div class="qhead"><div><h2>Prototype admin</h2><p style="margin:0">Local testing dashboard and item-generation workflow.</p></div><span class="badge">NO CLOUD SYNC</span></div>
+      <div class="tabs no-print" style="margin-top:16px">
+        <button class="tab active" onclick="adminTab('attempts',this)">Attempts</button>
+        <button class="tab" onclick="adminTab('items',this)">Question bank</button>
+        <button class="tab" onclick="adminTab('generator',this)">AI item lab</button>
+      </div>
+
+      <div id="attempts" class="admin-pane active">
+        <div class="grid3" id="adminKpis"></div>
+        <div class="spacer"></div>
+        <div class="tablewrap"><table><thead><tr><th>Participant</th><th>Date</th><th>Questions</th><th>Composite</th><th>Top domain</th><th></th></tr></thead><tbody id="attemptRows"></tbody></table></div>
+        <div class="spacer"></div><button class="danger no-print" onclick="resetAttempts()">Clear saved prototype attempts</button>
+      </div>
+
+      <div id="items" class="admin-pane">
+        <div class="grid4" id="bankStats"></div>
+        <div class="spacer"></div>
+        <label>Filter domain</label><select id="bankFilter" onchange="renderBank()"><option value="all">All domains</option></select>
+        <div class="spacer"></div>
+        <div class="tablewrap"><table><thead><tr><th>ID</th><th>Domain</th><th>Level</th><th>Question</th><th>Key</th></tr></thead><tbody id="bankRows"></tbody></table></div>
+      </div>
+
+      <div id="generator" class="admin-pane">
+        <div class="notice"><b>Prototype simulation:</b> this item lab demonstrates the AI review workflow but does not call a live language model. Generated candidates are template-based until an AI endpoint is connected.</div>
+        <div class="grid2" style="margin-top:14px">
+          <div>
+            <label>Domain</label><select id="genDomain"></select>
+            <label>Target difficulty</label><select id="genLevel"><option value="1">Foundational</option><option value="2" selected>Intermediate</option><option value="3">Advanced</option></select>
+            <div class="spacer"></div><button class="primary" style="width:100%;border-radius:14px;padding:14px" onclick="generateCandidate()">Generate candidate item</button>
+          </div>
+          <div id="candidateWrap" class="candidate"><div class="small">Generate a candidate to inspect the review workflow.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">Aptitude Intelligence Prototype v0.2 • local-only testing build • no external analytics or data transmission</div>
+</div>
+<script>
+const BANK=[{"id": "N1", "domain": "Numerical Reasoning", "difficulty": 1, "q": "A service costs $80 and is discounted by 25%. What is the new price?", "choices": ["$20", "$55", "$60", "$65"], "answer": 2, "explain": "25% of $80 is $20, so $80 − $20 = $60."}, {"id": "N2", "domain": "Numerical Reasoning", "difficulty": 1, "q": "A team completes 18 jobs in 6 hours at a constant rate. How many jobs per hour?", "choices": ["2", "3", "4", "6"], "answer": 1, "explain": "18 ÷ 6 = 3 jobs per hour."}, {"id": "N3", "domain": "Numerical Reasoning", "difficulty": 2, "q": "A budget rises from $2,400 to $2,760. What is the percentage increase?", "choices": ["10%", "12%", "15%", "18%"], "answer": 2, "explain": "Increase = $360. $360 ÷ $2,400 = 0.15 = 15%."}, {"id": "N4", "domain": "Numerical Reasoning", "difficulty": 2, "q": "If 4 technicians can finish a job in 15 hours at equal productivity, how many technician-hours are required?", "choices": ["19", "45", "60", "75"], "answer": 2, "explain": "4 × 15 = 60 technician-hours."}, {"id": "N5", "domain": "Numerical Reasoning", "difficulty": 2, "q": "A ratio is 3:5. If the smaller quantity is 24, what is the larger quantity?", "choices": ["32", "36", "40", "48"], "answer": 2, "explain": "24 ÷ 3 = 8; 5 × 8 = 40."}, {"id": "N6", "domain": "Numerical Reasoning", "difficulty": 3, "q": "Revenue is $12,500. Costs are 68% of revenue. What is gross profit?", "choices": ["$3,400", "$4,000", "$4,250", "$8,500"], "answer": 1, "explain": "Gross profit is 32% of $12,500 = $4,000."}, {"id": "N7", "domain": "Numerical Reasoning", "difficulty": 3, "q": "A quantity grows by 20% and then falls by 20%. Compared with the starting value, the final value is:", "choices": ["4% lower", "The same", "4% higher", "8% lower"], "answer": 0, "explain": "1.20 × 0.80 = 0.96, which is 4% lower."}, {"id": "N8", "domain": "Numerical Reasoning", "difficulty": 3, "q": "A project is 3/8 complete. After 25 more units are finished, it is 5/8 complete. How many total units are in the project?", "choices": ["75", "100", "125", "150"], "answer": 1, "explain": "The increase is 2/8 = 1/4 of the project. If 1/4 = 25, total = 100."}, {"id": "L1", "domain": "Logical Reasoning", "difficulty": 1, "q": "All Zorbs are Meks. No Meks are Tans. Which statement must be true?", "choices": ["No Zorbs are Tans", "All Tans are Zorbs", "Some Meks are Zorbs", "All Meks are Zorbs"], "answer": 0, "explain": "If every Zorb is a Mek and no Mek is a Tan, no Zorb can be a Tan."}, {"id": "L2", "domain": "Logical Reasoning", "difficulty": 1, "q": "What comes next? 2, 4, 8, 16, __", "choices": ["18", "24", "30", "32"], "answer": 3, "explain": "Each number doubles."}, {"id": "L3", "domain": "Logical Reasoning", "difficulty": 2, "q": "If A is before B, C is after B, and D is before A, which order is forced?", "choices": ["D, A, B, C", "A, D, B, C", "D, B, A, C", "A, B, D, C"], "answer": 0, "explain": "D is before A, A before B, and C after B."}, {"id": "L4", "domain": "Logical Reasoning", "difficulty": 2, "q": "Find the odd one out: 16, 25, 36, 45, 49", "choices": ["16", "25", "45", "49"], "answer": 2, "explain": "16, 25, 36, and 49 are perfect squares; 45 is not."}, {"id": "L5", "domain": "Logical Reasoning", "difficulty": 2, "q": "If the statement “If the alarm is armed, the light is on” is true, and the light is off, what follows?", "choices": ["The alarm is armed", "The alarm is not armed", "The alarm is broken", "Nothing can be concluded"], "answer": 1, "explain": "By contrapositive: if the light is not on, the alarm is not armed."}, {"id": "L6", "domain": "Logical Reasoning", "difficulty": 3, "q": "A code changes each letter to the next letter in the alphabet and then reverses the whole word. What does MESH become?", "choices": ["ITFN", "IFTO", "ITEO", "JFTO"], "answer": 0, "explain": "MESH → NFTI, then reverse → ITFN."}, {"id": "L8", "domain": "Logical Reasoning", "difficulty": 3, "q": "Four tasks W, X, Y, Z must be ordered. W is before X. Y is not first. Z is after X. Which order is valid?", "choices": ["Y, W, X, Z", "W, X, Z, Y", "W, Z, X, Y", "X, W, Y, Z"], "answer": 1, "explain": "W before X, Z after X, and Y is not first. W, X, Z, Y satisfies all conditions."}, {"id": "V1", "domain": "Verbal Reasoning", "difficulty": 1, "q": "Choose the word closest in meaning to “concise.”", "choices": ["Lengthy", "Brief", "Uncertain", "Decorative"], "answer": 1, "explain": "Concise means brief and to the point."}, {"id": "V2", "domain": "Verbal Reasoning", "difficulty": 1, "q": "Complete the analogy: Blueprint is to building as recipe is to __.", "choices": ["Kitchen", "Ingredient", "Meal", "Chef"], "answer": 2, "explain": "A blueprint guides creation of a building; a recipe guides creation of a meal."}, {"id": "V3", "domain": "Verbal Reasoning", "difficulty": 2, "q": "Which sentence most strongly supports the conclusion that a process is inefficient?", "choices": ["It has existed for ten years.", "It requires three approvals that all review the same information.", "Employees are familiar with it.", "It uses a digital form."], "answer": 1, "explain": "Redundant approvals are direct evidence of inefficiency."}, {"id": "V4", "domain": "Verbal Reasoning", "difficulty": 2, "q": "Choose the best word: “The evidence was incomplete, so the analyst remained ___ about the conclusion.”", "choices": ["certain", "skeptical", "indifferent", "celebratory"], "answer": 1, "explain": "Incomplete evidence reasonably leads to skepticism."}, {"id": "V5", "domain": "Verbal Reasoning", "difficulty": 2, "q": "Which pair has the most similar relationship to “cause : effect”?", "choices": ["question : answer", "spark : fire", "book : shelf", "map : road"], "answer": 1, "explain": "A spark can cause a fire."}, {"id": "V6", "domain": "Verbal Reasoning", "difficulty": 3, "q": "A manager says, “The new system reduced errors, but it also increased average handling time.” Which conclusion is best supported?", "choices": ["The system is a complete failure.", "The system improved one metric while worsening another.", "Handling time always matters more than errors.", "The old system should immediately return."], "answer": 1, "explain": "The sentence explicitly describes a tradeoff."}, {"id": "V7", "domain": "Verbal Reasoning", "difficulty": 3, "q": "Which statement contains an assumption rather than a directly stated fact?", "choices": ["Sales rose 8% in June.", "The survey had 420 responses.", "Customers prefer the new layout because sales rose.", "The new layout launched in May."], "answer": 2, "explain": "It infers customer preference from sales rather than stating measured preference."}, {"id": "V8", "domain": "Verbal Reasoning", "difficulty": 3, "q": "“Necessary” is to “required” as “sufficient” is to:", "choices": ["enough", "optional", "unlikely", "essential"], "answer": 0, "explain": "Sufficient means enough to meet a condition."}, {"id": "S1", "domain": "Spatial Reasoning", "difficulty": 1, "q": "An arrow points north. It rotates 90° clockwise. Which direction does it point?", "choices": ["West", "East", "South", "North"], "answer": 1, "explain": "90° clockwise from north is east."}, {"id": "S2", "domain": "Spatial Reasoning", "difficulty": 1, "q": "A square has one corner cut off by a single straight cut. How many corners does the remaining shape have?", "choices": ["4", "5", "6", "8"], "answer": 1, "explain": "The original corner is removed and two new corners are created: 4 − 1 + 2 = 5."}, {"id": "S3", "domain": "Spatial Reasoning", "difficulty": 2, "q": "You face east, turn right, then turn left twice. Which direction are you facing?", "choices": ["North", "South", "East", "West"], "answer": 0, "explain": "East → right = south → left = east → left = north."}, {"id": "S4", "domain": "Spatial Reasoning", "difficulty": 2, "q": "A cube has opposite face pairs A–D, B–E, and C–F. Which face is opposite B?", "choices": ["A", "C", "D", "E"], "answer": 3, "explain": "B and E are given as opposite."}, {"id": "S5", "domain": "Spatial Reasoning", "difficulty": 2, "q": "A shape is reflected in a vertical mirror. A point that was on the upper-left moves to:", "choices": ["upper-right", "lower-left", "lower-right", "center"], "answer": 0, "explain": "A vertical reflection swaps left and right, not up and down."}, {"id": "S6", "domain": "Spatial Reasoning", "difficulty": 3, "q": "You walk 3 blocks north, 2 east, 3 south, then 1 west. Where are you relative to the start?", "choices": ["1 block east", "1 block west", "2 blocks east", "At the start"], "answer": 0, "explain": "North/south cancel. East 2 minus west 1 = 1 block east."}, {"id": "S7", "domain": "Spatial Reasoning", "difficulty": 3, "q": "A cube is painted on all six faces and cut into 27 equal smaller cubes. How many small cubes have paint on exactly two faces?", "choices": ["8", "12", "6", "18"], "answer": 1, "explain": "A 3×3×3 cube has 12 edge-center cubes, each painted on exactly two faces."}, {"id": "S8", "domain": "Spatial Reasoning", "difficulty": 3, "q": "A paper is folded in half once vertically and once horizontally. One hole is punched through the folded paper away from all fold lines. How many holes appear when fully unfolded?", "choices": ["2", "3", "4", "8"], "answer": 2, "explain": "Two independent folds create four layers, yielding four symmetric holes."}, {"id": "A1", "domain": "Attention to Detail", "difficulty": 1, "q": "Which code exactly matches: MX-407B-19?", "choices": ["MX-470B-19", "MX-407B-19", "MX-4078-19", "NX-407B-19"], "answer": 1, "explain": "Only the second option matches character-for-character."}, {"id": "A2", "domain": "Attention to Detail", "difficulty": 1, "q": "How many times does the letter R appear in: “REORDER PRIOR RECORDS”?", "choices": ["4", "5", "6", "7"], "answer": 3, "explain": "REORDER (3 R), PRIOR (2 R), RECORDS (2 R) = 7."}, {"id": "A3", "domain": "Attention to Detail", "difficulty": 2, "q": "Which pair is NOT identical?", "choices": ["A7Q9 / A7Q9", "11O1 / 11O1", "B8S5 / B85S", "K2M4 / K2M4"], "answer": 2, "explain": "B8S5 and B85S have the final two characters reversed."}, {"id": "A4", "domain": "Attention to Detail", "difficulty": 2, "q": "A checklist says: Power OFF → Connect cable → Power ON → Test. Which action is third?", "choices": ["Test", "Connect cable", "Power ON", "Power OFF"], "answer": 2, "explain": "The third action is Power ON."}, {"id": "A5", "domain": "Attention to Detail", "difficulty": 2, "q": "Which number differs from the others?", "choices": ["5831047", "5831047", "5831407", "5831047"], "answer": 2, "explain": "The third swaps 0 and 4 positions."}, {"id": "A6", "domain": "Attention to Detail", "difficulty": 3, "q": "Compare: QF7-2L9-XM4 and QF7-2L9-XN4. What changed?", "choices": ["First character", "Middle digit", "Second-to-last letter", "Final digit"], "answer": 2, "explain": "M changed to N in the second-to-last letter position."}, {"id": "A7", "domain": "Attention to Detail", "difficulty": 3, "q": "A report lists 18, 21, 25, 28, 31. The rule should add 3 each time. Which entry first violates the rule?", "choices": ["21", "25", "28", "31"], "answer": 1, "explain": "After 21, the next should be 24, not 25."}, {"id": "A8", "domain": "Attention to Detail", "difficulty": 3, "q": "Which timestamp is earliest?", "choices": ["09:17:42", "09:17:24", "09:16:59", "09:18:01"], "answer": 2, "explain": "09:16:59 occurs before any 09:17 or 09:18 time."}, {"id": "Y1", "domain": "Systems Thinking", "difficulty": 1, "q": "A website checkout is slow only when payment is submitted. What should be investigated first?", "choices": ["Homepage colors", "Payment-processing path", "Logo size", "About page"], "answer": 1, "explain": "The symptom appears specifically at payment submission, so that path is the most relevant subsystem."}, {"id": "Y2", "domain": "Systems Thinking", "difficulty": 1, "q": "A process repeatedly fails at the same handoff between two teams. The most useful first action is to:", "choices": ["Replace both teams", "Map the handoff inputs, outputs, and ownership", "Add more meetings", "Ignore the pattern"], "answer": 1, "explain": "Mapping the interface exposes missing information and unclear ownership."}, {"id": "Y3", "domain": "Systems Thinking", "difficulty": 2, "q": "A company adds more sales leads, but revenue does not change. Which metric should be checked next?", "choices": ["Office temperature", "Lead-to-sale conversion rate", "Logo impressions", "Employee birthdays"], "answer": 1, "explain": "More leads without more revenue suggests a conversion bottleneck."}, {"id": "Y4", "domain": "Systems Thinking", "difficulty": 2, "q": "A fix improves one department but creates delays downstream. This is best described as:", "choices": ["Local optimization", "Random noise", "Perfect scaling", "Redundancy"], "answer": 0, "explain": "Optimizing one part while harming the larger system is local optimization."}, {"id": "Y5", "domain": "Systems Thinking", "difficulty": 2, "q": "If demand rises faster than a system’s slowest step can process work, what most likely forms?", "choices": ["A bottleneck queue", "A lower error rate automatically", "Extra capacity everywhere", "No measurable effect"], "answer": 0, "explain": "Work accumulates before the limiting step."}, {"id": "Y6", "domain": "Systems Thinking", "difficulty": 3, "q": "A support team’s response time improves after hiring, but customer resolution time does not. What should be examined next?", "choices": ["Initial response wording only", "Downstream escalation and resolution workflow", "Building parking", "Brand colors"], "answer": 1, "explain": "The first response improved; unresolved delay likely sits later in the workflow."}, {"id": "Y7", "domain": "Systems Thinking", "difficulty": 3, "q": "A recurring defect disappears after restarting a service but returns days later. The restart is most likely:", "choices": ["A root-cause fix", "A temporary symptom reset", "Proof hardware is perfect", "A permanent prevention control"], "answer": 1, "explain": "Recurrence indicates the underlying cause remains."}, {"id": "Y8", "domain": "Systems Thinking", "difficulty": 3, "q": "Which change best increases resilience in a critical workflow?", "choices": ["Rely on one undocumented expert", "Add a tested fallback path and monitoring", "Remove alerts", "Increase complexity without documentation"], "answer": 1, "explain": "Fallbacks plus monitoring reduce single points of failure and improve recovery."}, {"id": "T1", "domain": "Practical / Technical Reasoning", "difficulty": 1, "q": "A device will not power on. What is the best first troubleshooting step?", "choices": ["Replace the motherboard", "Verify power source and connection", "Reinstall every application", "Discard the device"], "answer": 1, "explain": "Start with the simplest, most fundamental dependency: power."}, {"id": "T2", "domain": "Practical / Technical Reasoning", "difficulty": 1, "q": "Several devices lose network access at the same time. Which is most likely worth checking first?", "choices": ["Each device wallpaper", "Shared router/switch connection", "Every keyboard", "Screen brightness"], "answer": 1, "explain": "A simultaneous failure suggests a shared dependency."}, {"id": "T3", "domain": "Practical / Technical Reasoning", "difficulty": 2, "q": "Audio has a loud hum after a new cable is connected. What is the most useful immediate comparison?", "choices": ["Change the room lights", "Remove or swap the new cable", "Update a spreadsheet", "Increase all gain controls"], "answer": 1, "explain": "Testing the newly introduced variable is an efficient isolation step."}, {"id": "T4", "domain": "Practical / Technical Reasoning", "difficulty": 2, "q": "A machine overheats only under heavy load. Which factor is most directly relevant?", "choices": ["Cooling capacity under load", "Case color", "Serial number length", "User password"], "answer": 0, "explain": "Heat generation rises with load, so cooling capacity is directly implicated."}, {"id": "T5", "domain": "Practical / Technical Reasoning", "difficulty": 2, "q": "A backup exists but has never been restored in a test. What is the main risk?", "choices": ["The backup may not actually be usable", "The backup will always be faster", "Testing would delete the original automatically", "No risk exists"], "answer": 0, "explain": "A backup is not proven until recovery is tested."}, {"id": "T6", "domain": "Practical / Technical Reasoning", "difficulty": 3, "q": "A signal works over a short cable but becomes unreliable over a long run. Which explanation is most plausible?", "choices": ["Signal loss or interference over distance", "The source changes language", "The connector gains power", "Distance cannot affect signals"], "answer": 0, "explain": "Longer runs can introduce attenuation and interference."}, {"id": "T7", "domain": "Practical / Technical Reasoning", "difficulty": 3, "q": "A system fails after a software update. What is the strongest troubleshooting approach?", "choices": ["Change several unrelated settings at once", "Compare logs/configuration before and after the update", "Assume hardware failure immediately", "Delete all records"], "answer": 1, "explain": "Comparing pre/post state isolates changes associated with the failure."}, {"id": "T8", "domain": "Practical / Technical Reasoning", "difficulty": 3, "q": "Two independent components must both work for a service to function. If each has 90% availability and failures are independent, approximate combined availability is:", "choices": ["99%", "90%", "81%", "45%"], "answer": 2, "explain": "0.9 × 0.9 = 0.81, or 81%."}, {"id": "G1", "domain": "Learning Adaptability", "difficulty": 1, "q": "You are given a new tool with no formal training. Which approach is most likely to build skill efficiently?", "choices": ["Avoid using it", "Try a small task, observe results, and adjust", "Memorize random commands without context", "Wait indefinitely for perfect instructions"], "answer": 1, "explain": "Short feedback loops support efficient learning."}, {"id": "G2", "domain": "Learning Adaptability", "difficulty": 1, "q": "After receiving corrective feedback, the most adaptive response is to:", "choices": ["Ignore it", "Test the feedback against the goal and adjust", "Defend every prior choice", "Stop the task"], "answer": 1, "explain": "Adaptive learning uses relevant feedback to improve performance."}, {"id": "G3", "domain": "Learning Adaptability", "difficulty": 2, "q": "You solved three similar problems with one method, but a fourth problem differs in an important constraint. What is best?", "choices": ["Use the old method automatically", "Re-evaluate whether the method still fits", "Skip the constraint", "Assume the problem is wrong"], "answer": 1, "explain": "Transfer requires noticing when conditions change."}, {"id": "G4", "domain": "Learning Adaptability", "difficulty": 2, "q": "Which study strategy best tests whether you can actually use a new concept?", "choices": ["Reread the same paragraph repeatedly", "Explain it and apply it to a new example", "Highlight every sentence", "Copy definitions word-for-word only"], "answer": 1, "explain": "Application and explanation test usable understanding."}, {"id": "G5", "domain": "Learning Adaptability", "difficulty": 2, "q": "A new process reduces errors but initially feels slower. What is the best response?", "choices": ["Reject it immediately", "Measure performance after a reasonable learning period", "Ignore error reduction", "Change processes daily"], "answer": 1, "explain": "New skills often have a learning curve; measure after adaptation."}, {"id": "G6", "domain": "Learning Adaptability", "difficulty": 3, "q": "Your prediction repeatedly fails in the same kind of situation. What is the strongest learning move?", "choices": ["Make the same prediction more confidently", "Identify the hidden assumption and test it", "Stop collecting evidence", "Blame randomness every time"], "answer": 1, "explain": "Repeated prediction failure often points to a flawed assumption or model."}, {"id": "G7", "domain": "Learning Adaptability", "difficulty": 3, "q": "You must learn a complex system quickly. Which sequence is most effective?", "choices": ["Memorize details first with no model", "Build a high-level model, practice core tasks, then deepen weak areas", "Avoid practice until all theory is known", "Study only the easiest part"], "answer": 1, "explain": "A mental model plus deliberate practice supports rapid, structured learning."}, {"id": "G8", "domain": "Learning Adaptability", "difficulty": 3, "q": "A method works in one environment but fails in another. What is the best conclusion?", "choices": ["The method is universally useless", "Context may affect the method’s effectiveness", "The second environment is invalid", "Evidence should be ignored"], "answer": 1, "explain": "Performance can depend on context; the difference should be investigated."}, {"id": "L7", "domain": "Logical Reasoning", "difficulty": 3, "q": "Three switches A, B, and C follow this rule: if A is on, B must be off; if B is off, C must be on. If A is on, what must be true?", "choices": ["B on and C off", "B off and C on", "B off and C off", "Nothing follows"], "answer": 1, "explain": "A on forces B off; B off forces C on."}];
+const DOMAINS=["Numerical Reasoning", "Logical Reasoning", "Verbal Reasoning", "Spatial Reasoning", "Attention to Detail", "Systems Thinking", "Practical / Technical Reasoning", "Learning Adaptability"];
+const LEVELS={1:'Foundational',2:'Intermediate',3:'Advanced'};
+let state=null;
+
+function go(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='admin') renderAdmin();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startTest(){
+  const total=Number(document.getElementById('length').value);
+  const name=document.getElementById('participant').value.trim()||'Anonymous tester';
+  const base=Math.floor(total/DOMAINS.length), extra=total%DOMAINS.length;
+  const quotas=Object.fromEntries(DOMAINS.map((d,i)=>[d,base+(i<extra?1:0)]));
+  state={name,total,quotas,started:Date.now(),answered:0,selected:null,used:[],levels:Object.fromEntries(DOMAINS.map(d=>[d,2])),counts:Object.fromEntries(DOMAINS.map(d=>[d,0])),answers:[],domainCursor:0};
+  go('test'); showNext();
+}
+function chooseDomain(){
+  for(let n=0;n<DOMAINS.length;n++){const idx=(state.domainCursor+n)%DOMAINS.length,d=DOMAINS[idx];if(state.counts[d]<state.quotas[d]){state.domainCursor=(idx+1)%DOMAINS.length;return d;}} return null;
+}
+function pickQuestion(domain){
+  const lvl=state.levels[domain];
+  const c=BANK.filter(q=>q.domain===domain&&!state.used.includes(q.id)).sort((a,b)=>Math.abs(a.difficulty-lvl)-Math.abs(b.difficulty-lvl));
+  const best=Math.abs(c[0].difficulty-lvl),pool=c.filter(x=>Math.abs(x.difficulty-lvl)===best);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function showNext(){
+  const d=chooseDomain(); if(!d)return finish();
+  const q=pickQuestion(d); state.current=q;state.selected=null;state.qStarted=Date.now();state.used.push(q.id);
+  qcount.textContent=`Question ${state.answered+1} of ${state.total}`;
+  qdomain.textContent=d;qlevel.textContent=`Adaptive difficulty: ${LEVELS[q.difficulty]}`;
+  qtext.textContent=q.q;qprog.style.width=`${Math.round(state.answered/state.total*100)}%`;
+  qchoices.innerHTML=''; q.choices.forEach((x,i)=>{const b=document.createElement('button');b.className='choice';b.textContent=`${String.fromCharCode(65+i)}. ${x}`;b.onclick=()=>selectChoice(i,b);qchoices.appendChild(b)});
+  continueBtn.disabled=true;
+}
+function selectChoice(i,b){state.selected=i;document.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');continueBtn.disabled=false}
+function submitAnswer(){
+  const q=state.current,correct=state.selected===q.answer,ms=Date.now()-state.qStarted;
+  state.answers.push({id:q.id,domain:q.domain,difficulty:q.difficulty,selected:state.selected,answer:q.answer,correct,ms});
+  state.counts[q.domain]++;state.answered++;state.levels[q.domain]=Math.max(1,Math.min(3,state.levels[q.domain]+(correct?1:-1)));
+  state.answered>=state.total?finish():showNext();
+}
+function domainScore(d){const r=state.answers.filter(x=>x.domain===d);if(!r.length)return null;const earned=r.reduce((s,x)=>s+(x.correct?x.difficulty:0),0),possible=r.reduce((s,x)=>s+x.difficulty,0);return Math.round(100*earned/possible)}
+function band(s){if(s>=85)return'Distinct strength';if(s>=70)return'Strong';if(s>=55)return'Developing strength';if(s>=40)return'Mixed';return'Needs more evidence'}
+function finish(){
+  const ended=Date.now(),scores=DOMAINS.map(d=>({domain:d,score:domainScore(d)})).filter(x=>x.score!==null).sort((a,b)=>b.score-a.score);
+  const composite=Math.round(scores.reduce((s,x)=>s+x.score,0)/scores.length);state.ended=ended;state.scores=scores;state.composite=composite;
+  const attempt={id:'A'+ended,name:state.name,started:state.started,ended,total:state.total,composite,scores,answers:state.answers};
+  const all=getAttempts();all.unshift(attempt);localStorage.setItem('aptitude_attempts_v02',JSON.stringify(all.slice(0,100)));
+  resultName.textContent=`${state.name} — aptitude profile`;compositeEl=document.getElementById('composite');compositeEl.textContent=composite;
+  const top=scores.slice(0,3).map(x=>x.domain).join(', ');resultSummary.innerHTML=`Highest observed areas: <b>${top}</b>. Composite is an internal prototype index, not a population percentile.`;
+  elapsed.textContent=`${Math.max(1,Math.round((ended-state.started)/60000))} min`;
+  resultBars.innerHTML='';scores.forEach(x=>{const div=document.createElement('div');div.className='result-row';div.innerHTML=`<div class="qhead"><strong>${x.domain}</strong><strong>${x.score}/100</strong></div><div class="meter"><i style="width:${x.score}%"></i></div><div class="small">${band(x.score)}</div>`;resultBars.appendChild(div)});
+  go('results');
+}
+function getAttempts(){try{return JSON.parse(localStorage.getItem('aptitude_attempts_v02')||'[]')}catch(e){return[]}}
+function renderAdmin(){
+  const a=getAttempts(),avg=a.length?Math.round(a.reduce((s,x)=>s+x.composite,0)/a.length):0;
+  adminKpis.innerHTML=`<div class="stat"><div class="k">Saved attempts</div><div class="kpi">${a.length}</div></div><div class="stat"><div class="k">Average composite</div><div class="kpi">${avg||'—'}</div></div><div class="stat"><div class="k">Question bank</div><div class="kpi">${BANK.length}</div></div>`;
+  attemptRows.innerHTML=a.length?'':'<tr><td colspan="6" class="small">No attempts saved on this device yet.</td></tr>';
+  a.forEach(x=>{const tr=document.createElement('tr'),top=x.scores[0]?.domain||'—';tr.innerHTML=`<td>${escapeHtml(x.name)}</td><td>${new Date(x.ended).toLocaleString()}</td><td>${x.total}</td><td>${x.composite}</td><td>${top}</td><td><button class="ghost" style="padding:7px 10px" onclick="exportAttempt('${x.id}')">Export</button></td>`;attemptRows.appendChild(tr)});
+  const filter=document.getElementById('bankFilter'),gen=document.getElementById('genDomain');if(filter.options.length===1)DOMAINS.forEach(d=>{filter.add(new Option(d,d));gen.add(new Option(d,d))});renderBank();
+}
+function adminTab(id,btn){document.querySelectorAll('.admin-pane').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
+function renderBank(){
+  const val=document.getElementById('bankFilter')?.value||'all',rows=val==='all'?BANK:BANK.filter(q=>q.domain===val);
+  bankStats.innerHTML=`<div class="stat"><div class="k">Visible items</div><div class="v">${rows.length}</div></div><div class="stat"><div class="k">Foundational</div><div class="v">${rows.filter(x=>x.difficulty===1).length}</div></div><div class="stat"><div class="k">Intermediate</div><div class="v">${rows.filter(x=>x.difficulty===2).length}</div></div><div class="stat"><div class="k">Advanced</div><div class="v">${rows.filter(x=>x.difficulty===3).length}</div></div>`;
+  bankRows.innerHTML='';rows.forEach(q=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${q.id}</td><td>${q.domain}</td><td>${LEVELS[q.difficulty]}</td><td>${escapeHtml(q.q)}</td><td>${String.fromCharCode(65+q.answer)}</td>`;bankRows.appendChild(tr)})
+}
+function exportAttempt(id){const x=getAttempts().find(a=>a.id===id);if(!x)return;const blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`aptitude-${id}.json`;a.click();URL.revokeObjectURL(url)}
+function resetAttempts(){if(confirm('Clear saved prototype attempts on this device?')){localStorage.removeItem('aptitude_attempts_v02');renderAdmin()}}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+
+const GEN={
+'Numerical Reasoning':['A contractor completes {a} units in {b} hours at a constant rate. How many units per hour?','A budget of ${a} increases by {b}%. What is the new total?'],
+'Logical Reasoning':['If all Rens are Tols and no Tols are Vims, which conclusion must be true?','A sequence follows a consistent rule: {a}, {b}, __. Which option best continues it?'],
+'Verbal Reasoning':['Which statement most strongly supports the conclusion that a process contains unnecessary duplication?','Choose the word closest in meaning to “methodical.”'],
+'Spatial Reasoning':['You face north, turn right, then left, then right. Which direction are you facing?','A cube has one marked face. After a 90° rotation, which relationship remains unchanged?'],
+'Attention to Detail':['Which code exactly matches: PX-407Q-18?','Which entry differs from the others by exactly one character?'],
+'Systems Thinking':['A workflow speeds up at the first step but total completion time is unchanged. What should be investigated next?','Demand rises, but output remains flat. Which system constraint should be checked first?'],
+'Practical / Technical Reasoning':['Several devices fail simultaneously. Which troubleshooting step best tests a shared dependency first?','A signal is reliable at short distance but unstable over a long cable. Which cause is most plausible?'],
+'Learning Adaptability':['A familiar method stops working after a key constraint changes. What is the most adaptive next move?','Which approach best tests whether a newly learned concept can transfer to a different problem?']
+};
+function generateCandidate(){
+  const d=genDomain.value,l=Number(genLevel.value),tpl=GEN[d][Math.floor(Math.random()*GEN[d].length)],a=12+Math.floor(Math.random()*30),b=3+Math.floor(Math.random()*12),q=tpl.replaceAll('{a}',a).replaceAll('{b}',b);
+  const choices=l===1?['Check the most direct dependency first','Change several variables at once','Ignore the pattern','Assume the outcome is random']:l===2?['Map the constraint and test one variable','Replace the entire system immediately','Add unrelated complexity','Stop measuring outcomes']:['Identify the bottleneck, state a hypothesis, and run a controlled test','Optimize a random upstream step','Change multiple dependencies simultaneously','Treat correlation as proof of cause'];
+  candidateWrap.innerHTML=`<div class="small">SIMULATED AI CANDIDATE • ${escapeHtml(d)} • ${LEVELS[l]}</div><h3 style="margin-top:8px">${escapeHtml(q)}</h3>${choices.map((x,i)=>`<div class="small" style="padding:6px 0">${String.fromCharCode(65+i)}. ${escapeHtml(x)}</div>`).join('')}<div class="spacer"></div><div class="row"><button class="primary" onclick="approveCandidate()">Approve to review queue</button><button class="ghost" onclick="generateCandidate()">Regenerate</button></div>`;
+}
+function approveCandidate(){candidateWrap.innerHTML='<div class="small">Candidate marked <b style="color:var(--good)">APPROVED FOR HUMAN REVIEW</b>. In the production version, approval would save it to a review queue—not directly publish it to a live test.</div>'}
+</script>
+</body>
+</html>
