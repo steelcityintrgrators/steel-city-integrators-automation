@@ -59,7 +59,7 @@ for (const required of [
 const analyzerPath='aptitude-prototype/pilot-analyzer.html';
 if (!fs.existsSync(analyzerPath)) fail('Pilot analyzer is missing.');
 const analyzer=fs.readFileSync(analyzerPath,'utf8');
-for (const required of ['Pilot Analyzer','LOCAL ANALYTICS • PILOT ONLY','function exportSummary()']) {
+for (const required of ['Pilot Analyzer','LOCAL ANALYTICS • PILOT ONLY','function exportSummary()','function pearson','Option share A/B/C/D','negative discrimination']) {
   if (!analyzer.includes(required)) fail('Pilot analyzer safeguard missing: '+required);
 }
 for (const forbidden of ['XMLHttpRequest','navigator.sendBeacon']) {
