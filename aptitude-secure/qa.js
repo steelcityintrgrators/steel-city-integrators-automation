@@ -12,4 +12,24 @@ process.env.APTITUDE_SESSION_SECRET='0123456789abcdef0123456789abcdef0123456789a
 const e=require('./lib/engine');
 const token=e.seal({exp:Date.now()+60000,hello:'world'});
 if(e.open(token).hello!=='world')fail('session encryption roundtrip failed');
+
+const domains=[
+  'Numerical Reasoning','Logical Reasoning','Verbal Reasoning','Spatial Reasoning',
+  'Attention to Detail','Systems Thinking','Practical / Technical Reasoning','Learning Adaptability'
+];
+process.env.APTITUDE_ITEM_BANK=JSON.stringify(domains.flatMap((domain,di)=>[
+  {id:'Q'+di+'A',domain,difficulty:1,q:'Fixture A',choices:['A','B','C','D'],answer:0},
+  {id:'Q'+di+'B',domain,difficulty:2,q:'Fixture B',choices:['A','B','C','D'],answer:1},
+  {id:'Q'+di+'C',domain,difficulty:3,q:'Fixture C',choices:['A','B','C','D'],answer:2}
+]));
+const bank=e.loadBank(),state=e.createState(16,'QA');
+for(let i=0;i<16;i++){
+  const item=e.prepareNext(state,bank);
+  if(!item||Object.prototype.hasOwnProperty.call(item,'answer'))fail('public question leaked answer');
+  const full=bank.find(x=>x.id===item.id);
+  e.applyAnswer(state,full.answer,bank);
+}
+const report=e.buildReport(state);
+if(report.total!==16||report.scores.length!==8||report.composite!==100)fail('full adaptive flow failed');
+if(report.answers.some(x=>Object.prototype.hasOwnProperty.call(x,'answer')))fail('report leaked answer key');
 console.log('SECURE QA PASS');
