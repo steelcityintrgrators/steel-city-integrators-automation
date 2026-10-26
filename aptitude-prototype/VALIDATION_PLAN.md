@@ -122,6 +122,7 @@ Allowed:
 - exploratory
 - observed performance on the current pilot item bank
 - provisional profile
+- exploratory pathway hypotheses based on observed pilot-domain combinations
 
 Not allowed yet:
 - IQ score
@@ -131,11 +132,12 @@ Not allowed yet:
 - validated hiring predictor
 - school-placement determination
 - guaranteed career fit
+- validated career-fit recommendation
 
 ## Next evidence task
 
 Collect structured pilot exports using:
-- `schemaVersion: 0.3`
+- `schemaVersion: 0.4`
 - `bankVersion: pilot-64-v1`
 - `scoringVersion: weighted-accuracy-v1`
 
