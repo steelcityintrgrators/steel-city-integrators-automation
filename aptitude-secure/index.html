@@ -190,7 +190,7 @@ function band(s,n){if(n<4)return'Low evidence — use the full test for a strong
 function finish(){
   const ended=Date.now(),scores=DOMAINS.map(domainScore).filter(Boolean).sort((a,b)=>b.score-a.score);
   const composite=Math.round(scores.reduce((s,x)=>s+x.score,0)/scores.length);state.ended=ended;state.scores=scores;state.composite=composite;
-  state.currentReport={schemaVersion:'0.4',bankVersion:'pilot-64-v1',scoringVersion:'weighted-accuracy-v1',id:'A'+ended,testId:state.name,started:state.started,ended,total:state.total,composite,scores,answers:state.answers.map(({id,domain,difficulty,selected,correct,ms})=>({id,domain,difficulty,selected,correct,ms}))};
+  state.currentReport={schemaVersion:'0.5-secure',bankVersion:'pilot-64-v1',scoringVersion:'server-weighted-accuracy-v1',id:'A'+ended,testId:state.name,started:state.started,ended,total:state.total,composite,scores,answers:state.answers.map(({id,domain,difficulty,selected,correct,ms})=>({id,domain,difficulty,selected,correct,ms}))};
   resultName.textContent=`${state.name} — aptitude profile`;compositeEl=document.getElementById('composite');compositeEl.textContent=composite;
   const top=scores.slice(0,3).map(x=>x.domain).join(', ');resultSummary.innerHTML=`Highest observed areas: <b>${top}</b>. Composite is an internal prototype index, not a population percentile.`;
   elapsed.textContent=`${Math.max(1,Math.round((ended-state.started)/60000))} min`;
