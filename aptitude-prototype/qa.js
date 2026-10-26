@@ -47,6 +47,9 @@ for (const [needle,msg] of banned) {
 for (const required of [
   'PUBLIC DEVELOPMENTAL PROTOTYPE',
   'function exportCurrent()',
+  "schemaVersion:'0.4'",
+  'function buildPathwayProfile',
+  'NOT A FIT DETERMINATION',
   'Low evidence — use the full test',
   'not suitable for supervised or high-stakes testing'
 ]) {
