@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Aptitude Intelligence — Pilot Analyzer</title>
+<style>
+:root{--bg:#080d1b;--panel:#10182d;--panel2:#0b1428;--text:#f7f9fc;--muted:#98a7c2;--line:#27324d;--accent:#76d5ff;--good:#86efac;--warn:#fde68a;--bad:#fda4af}
+*{box-sizing:border-box}body{margin:0;background:#080d1b;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{max-width:1100px;margin:auto;padding:20px 14px 60px}
+h1{font-size:clamp(32px,7vw,58px);line-height:1;margin:12px 0}h2,h3{margin:0 0 10px}p{color:var(--muted);line-height:1.55}.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--muted);font-size:12px;font-weight:800}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stat{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px}.k{font-size:12px;color:var(--muted)}.v{font-size:28px;font-weight:900;margin-top:5px}
+button{border:0;border-radius:14px;padding:13px 15px;font-weight:800;cursor:pointer;background:var(--accent);color:#06101c}.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.drop{border:1px dashed #405179;border-radius:18px;padding:24px;text-align:center;background:#0a1327}.notice{border-left:3px solid var(--warn);padding:11px 14px;background:#171a25;border-radius:8px;color:#d9deea}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:16px}table{border-collapse:collapse;width:100%;min-width:760px}th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{color:var(--muted);background:#0b1428}.flag{font-weight:800}.flag.review{color:var(--warn)}.flag.ok{color:var(--good)}.flag.wait{color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}.hidden{display:none}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}.bar{height:8px;background:#071020;border-radius:999px;overflow:hidden;margin-top:7px}.bar i{display:block;height:100%;background:var(--accent)}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.row{display:block}.row>*{width:100%;margin:6px 0}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="badge">LOCAL ANALYTICS • PILOT ONLY</div>
+  <h1>Pilot Analyzer</h1>
+  <p>Load exported Aptitude Intelligence JSON sessions to inspect pilot performance. Files are processed in this browser and are not uploaded anywhere by this page.</p>
+
+  <div class="card">
+    <div class="drop">
+      <h3>Load pilot exports</h3>
+      <p class="small">Select one or more result JSON files exported from the participant prototype.</p>
+      <input id="files" type="file" accept=".json,application/json" multiple>
+      <div style="height:12px"></div>
+      <button onclick="analyze()">Analyze files</button>
+    </div>
+    <div id="errors" class="small" style="margin-top:10px"></div>
+  </div>
+
+  <div id="report" class="hidden">
+    <div class="grid" id="kpis"></div>
+
+    <div class="card">
+      <h2>Domain summary</h2>
+      <p class="small">Observed prototype scores only. These are not population norms.</p>
+      <div id="domains"></div>
+    </div>
+
+    <div class="card">
+      <div class="row"><div><h2>Item diagnostics</h2><p class="small">Review flags activate only after at least 10 responses to an item.</p></div><div style="text-align:right"><button class="ghost" onclick="exportSummary()">Export analytics JSON</button></div></div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Item</th><th>Domain</th><th>Level</th><th>N</th><th>% correct</th><th>Median sec</th><th>Flag</th></tr></thead>
+          <tbody id="items"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="notice"><b>Interpretation:</b> Very high or low percent-correct values can indicate an item is too easy or too hard for this pilot sample, but they do not by themselves prove a bad item. Review construct relevance, distractor behavior, sample composition, and later discrimination/fairness evidence before retiring an item.</div>
+  </div>
+</div>
+<script>
+let lastSummary=null;
+const DOMAIN_ORDER=['Numerical Reasoning','Logical Reasoning','Verbal Reasoning','Spatial Reasoning','Attention to Detail','Systems Thinking','Practical / Technical Reasoning','Learning Adaptability'];
+
+function median(values){
+  if(!values.length)return null;
+  const a=[...values].sort((x,y)=>x-y),m=Math.floor(a.length/2);
+  return a.length%2?a[m]:(a[m-1]+a[m])/2;
+}
+function pct(n,d){return d?Math.round(100*n/d):0}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+
+async function analyze(){
+  const input=document.getElementById('files'),err=document.getElementById('errors');
+  err.textContent='';document.getElementById('report').classList.add('hidden');
+  if(!input.files.length){err.textContent='Choose at least one exported JSON file.';return}
+  const sessions=[],failures=[];
+  for(const file of input.files){
+    try{
+      const x=JSON.parse(await file.text());
+      if(!x || !Array.isArray(x.answers) || !Array.isArray(x.scores))throw new Error('missing answers/scores');
+      if(!x.schemaVersion)throw new Error('missing schemaVersion');
+      sessions.push(x);
+    }catch(e){failures.push(file.name+': '+e.message)}
+  }
+  if(failures.length)err.textContent='Skipped '+failures.length+' file(s): '+failures.join(' | ');
+  if(!sessions.length)return;
+
+  const versions=[...new Set(sessions.map(x=>x.schemaVersion))];
+  const banks=[...new Set(sessions.map(x=>x.bankVersion||'unknown'))];
+  const scorings=[...new Set(sessions.map(x=>x.scoringVersion||'unknown'))];
+
+  const domainAgg=new Map();
+  DOMAIN_ORDER.forEach(d=>domainAgg.set(d,{scores:[],sessions:0}));
+  const itemAgg=new Map();
+
+  sessions.forEach(s=>{
+    (s.scores||[]).forEach(x=>{
+      if(!domainAgg.has(x.domain))domainAgg.set(x.domain,{scores:[],sessions:0});
+      const a=domainAgg.get(x.domain);a.scores.push(Number(x.score));a.sessions++;
+    });
+    (s.answers||[]).forEach(a=>{
+      if(!itemAgg.has(a.id))itemAgg.set(a.id,{id:a.id,domain:a.domain,difficulty:a.difficulty,n:0,correct:0,times:[]});
+      const x=itemAgg.get(a.id);x.n++;if(a.correct)x.correct++;if(Number.isFinite(a.ms))x.times.push(a.ms/1000);
+    });
+  });
+
+  const composites=sessions.map(x=>Number(x.composite)).filter(Number.isFinite);
+  const durations=sessions.map(x=>(Number(x.ended)-Number(x.started))/60000).filter(x=>Number.isFinite(x)&&x>=0);
+  const avgComposite=composites.length?Math.round(composites.reduce((a,b)=>a+b,0)/composites.length):0;
+  const medianMinutes=durations.length?Math.round(median(durations)*10)/10:null;
+
+  document.getElementById('kpis').innerHTML=
+    '<div class="stat"><div class="k">Sessions</div><div class="v">'+sessions.length+'</div></div>'+
+    '<div class="stat"><div class="k">Avg composite</div><div class="v">'+avgComposite+'</div></div>'+
+    '<div class="stat"><div class="k">Median minutes</div><div class="v">'+(medianMinutes??'—')+'</div></div>'+
+    '<div class="stat"><div class="k">Items observed</div><div class="v">'+itemAgg.size+'</div></div>';
+
+  const dwrap=document.getElementById('domains');dwrap.innerHTML='';
+  DOMAIN_ORDER.forEach(d=>{
+    const a=domainAgg.get(d);if(!a||!a.scores.length)return;
+    const avg=Math.round(a.scores.reduce((x,y)=>x+y,0)/a.scores.length);
+    const row=document.createElement('div');row.style.padding='12px 0';row.style.borderBottom='1px solid var(--line)';
+    row.innerHTML='<div style="display:flex;justify-content:space-between;gap:10px"><strong>'+escapeHtml(d)+'</strong><strong>'+avg+'/100</strong></div><div class="bar"><i style="width:'+avg+'%"></i></div><div class="small">'+a.sessions+' session'+(a.sessions===1?'':'s')+'</div>';
+    dwrap.appendChild(row);
+  });
+
+  const rows=[...itemAgg.values()].sort((a,b)=>a.domain.localeCompare(b.domain)||String(a.id).localeCompare(String(b.id)));
+  const tbody=document.getElementById('items');tbody.innerHTML='';
+  rows.forEach(x=>{
+    const pc=pct(x.correct,x.n),med=x.times.length?Math.round(median(x.times)*10)/10:null;
+    let flag='Need more data',cls='wait';
+    if(x.n>=10){
+      if(pc<30){flag='Review: very hard';cls='review'}
+      else if(pc>90){flag='Review: very easy';cls='review'}
+      else{flag='Monitor';cls='ok'}
+    }
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td>'+escapeHtml(x.id)+'</td><td>'+escapeHtml(x.domain)+'</td><td>'+escapeHtml(x.difficulty)+'</td><td>'+x.n+'</td><td>'+pc+'%</td><td>'+(med??'—')+'</td><td><span class="flag '+cls+'">'+flag+'</span></td>';
+    tbody.appendChild(tr);
+  });
+
+  lastSummary={
+    generatedAt:new Date().toISOString(),
+    sessions:sessions.length,
+    schemaVersions:versions,
+    bankVersions:banks,
+    scoringVersions:scorings,
+    averageComposite:avgComposite,
+    medianMinutes,
+    domains:Object.fromEntries([...domainAgg.entries()].filter(([,a])=>a.scores.length).map(([d,a])=>[d,{n:a.sessions,averageScore:Math.round(a.scores.reduce((x,y)=>x+y,0)/a.scores.length)}])),
+    items:rows.map(x=>({id:x.id,domain:x.domain,difficulty:x.difficulty,n:x.n,percentCorrect:pct(x.correct,x.n),medianSeconds:x.times.length?Math.round(median(x.times)*10)/10:null}))
+  };
+
+  if(versions.length>1||banks.length>1||scorings.length>1){
+    err.textContent+=(err.textContent?' | ':'')+'Warning: mixed schema/bank/scoring versions detected. Do not combine incompatible versions for formal analysis.';
+  }
+  document.getElementById('report').classList.remove('hidden');
+}
+function exportSummary(){
+  if(!lastSummary)return;
+  const blob=new Blob([JSON.stringify(lastSummary,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='aptitude-pilot-analytics.json';a.click();URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
